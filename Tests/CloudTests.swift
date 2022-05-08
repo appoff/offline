@@ -26,4 +26,10 @@ final class CloudTests: XCTestCase {
         let value = await cloud.model.settings.interest
         XCTAssertFalse(value)
     }
+    
+    func testRotate() async {
+        await cloud.update(rotate: true)
+        let value = await cloud.model.settings.rotate
+        XCTAssertTrue(value)
+    }
 }

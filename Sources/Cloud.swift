@@ -13,9 +13,21 @@ extension Cloud where Output == Archive {
         await stream()
     }
     
+    public func update(directions: Settings.Directions) async {
+        guard directions != model.settings.directions else { return }
+        model.settings.directions = directions
+        await stream()
+    }
+    
     public func update(interest: Bool) async {
         guard interest != model.settings.interest else { return }
         model.settings.interest = interest
+        await stream()
+    }
+    
+    public func update(rotate: Bool) async {
+        guard rotate != model.settings.rotate else { return }
+        model.settings.rotate = rotate
         await stream()
     }
 }
