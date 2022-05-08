@@ -20,4 +20,10 @@ final class CloudTests: XCTestCase {
         let value = await cloud.model.settings.map
         XCTAssertEqual(.emphasis, value)
     }
+    
+    func testInterest() async {
+        await cloud.update(interest: false)
+        let value = await cloud.model.settings.interest
+        XCTAssertFalse(value)
+    }
 }

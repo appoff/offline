@@ -12,4 +12,10 @@ extension Cloud where Output == Archive {
         model.settings.map = map
         await stream()
     }
+    
+    public func update(interest: Bool) async {
+        guard interest != model.settings.interest else { return }
+        model.settings.interest = interest
+        await stream()
+    }
 }
