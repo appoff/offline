@@ -6,4 +6,10 @@ extension Cloud where Output == Archive {
         model.settings.scheme = scheme
         await stream()
     }
+    
+    public func update(map: Settings.Map) async {
+        guard map != model.settings.map else { return }
+        model.settings.map = map
+        await stream()
+    }
 }

@@ -14,4 +14,10 @@ final class CloudTests: XCTestCase {
         let value = await cloud.model.settings.scheme
         XCTAssertEqual(.dark, value)
     }
+    
+    func testMap() async {
+        await cloud.update(map: .emphasis)
+        let value = await cloud.model.settings.map
+        XCTAssertEqual(.emphasis, value)
+    }
 }
