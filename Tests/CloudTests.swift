@@ -21,6 +21,12 @@ final class CloudTests: XCTestCase {
         XCTAssertEqual(.emphasis, value)
     }
     
+    func testDirections() async {
+        await cloud.update(directions: .transit)
+        let value = await cloud.model.settings.directions
+        XCTAssertEqual(.transit, value)
+    }
+    
     func testInterest() async {
         await cloud.update(interest: false)
         let value = await cloud.model.settings.interest
