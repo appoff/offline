@@ -1,35 +1,53 @@
 import MapKit
 
-private let margin = 0.001
+
+private let padding = 2
 
 public struct Factory {
     private let points: [MKPointAnnotation]
     private let route: [MKRoute]
-    private let rect: MKMapRect
+    private let shots: [Shot]
     
     init(points: [MKPointAnnotation], route: [MKRoute]) {
         self.points = points
         self.route = route
         
-        rect = { (coords: [CLLocationCoordinate2D]) -> MKMapRect in
-            
-            { (latitude: [CLLocationCoordinate2D], longitude: [CLLocationCoordinate2D]) -> MKMapRect in
+        let rect = (points.map(\.coordinate) + route.coordinate).rect
+        
+        shots = (13 ... 19)
+            .flatMap { z -> [Shot] in
+                let max = Int(min(pow(2, Double(z - 1)), 10))
+                let proportion = MKMapRect.world.width / pow(2, .init(z))
+                let minY = Int(rect.minY / proportion) - padding
+                let maxX = Int(ceil(rect.maxX / proportion)) + padding
+                let maxY = Int(ceil(rect.maxY / proportion)) + padding
                 
-                { (min: MKMapPoint, max: MKMapPoint) -> MKMapRect in
-                    
-                        .init(x: min.x, y: min.y, width: max.y - min.x, height: max.y - min.y)
-                    
-                } (.init(.init(latitude: latitude.first!.latitude + margin, longitude: longitude.first!.longitude - margin)),
-                   .init(.init(latitude: latitude.last!.latitude - margin, longitude: longitude.last!.longitude + margin)))
+                var shots2 = [Shot]()
+                var minX = Int(rect.minX / proportion) - padding
                 
-            } (coords.sorted { $0.latitude > $1.latitude }, coords.sorted { $0.longitude < $1.longitude })
-            
-        } (points
-            .map(\.coordinate) + route
-            .flatMap {
-                UnsafeBufferPointer(start: $0.polyline.points(), count: $0.polyline.pointCount)
-                    .map(\.coordinate)
-            })
+//                while minX < maxX {
+//
+//                    var y = minY
+//                    let width = min(maxX - minX, max - 1)
+//
+//                    while y < maxY {
+//
+//                        let height = min(maxY - y, max)
+//
+//                        shots.append(.init(x: minX - 1,
+//                                           y: y,
+//                                           z: z,
+//                                           width: width + 1,
+//                                           height: height))
+//
+//                        y += height
+//                    }
+//
+//                    minX += width
+//                }
+                
+                return shots2
+            }
     }
 }
 
