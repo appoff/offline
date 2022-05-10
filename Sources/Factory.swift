@@ -1,8 +1,5 @@
 import MapKit
 
-
-private let padding = 2
-
 public struct Factory {
     private let points: [MKPointAnnotation]
     private let route: [MKRoute]
@@ -11,43 +8,9 @@ public struct Factory {
     init(points: [MKPointAnnotation], route: [MKRoute]) {
         self.points = points
         self.route = route
-        
-        let rect = (points.map(\.coordinate) + route.coordinate).rect
-        
-        shots = (13 ... 19)
-            .flatMap { z -> [Shot] in
-                let max = Int(min(pow(2, Double(z - 1)), 10))
-                let proportion = MKMapRect.world.width / pow(2, .init(z))
-                let minY = Int(rect.minY / proportion) - padding
-                let maxX = Int(ceil(rect.maxX / proportion)) + padding
-                let maxY = Int(ceil(rect.maxY / proportion)) + padding
-                
-                var shots2 = [Shot]()
-                var minX = Int(rect.minX / proportion) - padding
-                
-//                while minX < maxX {
-//
-//                    var y = minY
-//                    let width = min(maxX - minX, max - 1)
-//
-//                    while y < maxY {
-//
-//                        let height = min(maxY - y, max)
-//
-//                        shots.append(.init(x: minX - 1,
-//                                           y: y,
-//                                           z: z,
-//                                           width: width + 1,
-//                                           height: height))
-//
-//                        y += height
-//                    }
-//
-//                    minX += width
-//                }
-                
-                return shots2
-            }
+        shots = (points.map(\.coordinate) + route.coordinate)
+            .rect
+            .shots
     }
 }
 
