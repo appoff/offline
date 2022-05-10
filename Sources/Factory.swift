@@ -1,6 +1,12 @@
 import MapKit
+import Combine
 
 public struct Factory {
+    public let shoot = PassthroughSubject<Void, Never>()
+    public let error = PassthroughSubject<Void, Never>()
+    public let finished = PassthroughSubject<Void, Never>()
+    public let progress = CurrentValueSubject<_, Never>(Float())
+    
     private let points: [MKPointAnnotation]
     private let route: [MKRoute]
     private let shots: [Shot]
