@@ -1,15 +1,18 @@
 import MapKit
 import Combine
 
-public struct Factory {
-    public let shoot = PassthroughSubject<Void, Never>()
-    public let error = PassthroughSubject<Void, Never>()
+public final class Factory {
+    public let resume = PassthroughSubject<Void, Never>()
+    public let fail = PassthroughSubject<Void, Never>()
     public let finished = PassthroughSubject<Void, Never>()
     public let progress = CurrentValueSubject<_, Never>(Float())
-    
+    private weak var shooter: MKMapSnapshotter?
+    private var subs = Set<AnyCancellable>()
+    private let total: Float
     private let points: [MKPointAnnotation]
     private let route: [MKRoute]
     private let shots: [Shot]
+    private let timer = DispatchSource.makeTimerSource()
     
     init(points: [MKPointAnnotation], route: [MKRoute]) {
         self.points = points
@@ -17,6 +20,71 @@ public struct Factory {
         shots = (points.map(\.coordinate) + route.coordinate)
             .rect
             .shots
+        total = .init(shots.count)
+        
+        resume
+            .sink { [weak self] in
+                Task { [weak self] in
+                    await self?.shoot()
+                }
+            }
+            .store(in: &subs)
+        
+        timer.activate()
+        timer.schedule(deadline: .distantFuture)
+        timer.setEventHandler { [weak self] in
+            self?.shooter?.cancel()
+            self?.fail.send()
+        }
+    }
+    
+    @MainActor private func shoot() async {
+        guard let next = shots.last else { return }
+        progress.send((total - .init(shots.count)) / total)
+        timer.schedule(deadline: .now() + 10)
+        let shooter = MKMapSnapshotter(options: next.options)
+        self.shooter = shooter
+        
+        do {
+            let snapshot = try await shooter.start()
+            timer.schedule(deadline: .distantFuture)
+        } catch {
+            fail.send()
+            timer.schedule(deadline: .distantFuture)
+        }
+        
+        /*
+         guard let self = self, let shot = self.shots.last else { return }
+         self.progress((self.total - .init(self.shots.count)) / self.total)
+         self.timer.schedule(deadline: .now() + 22)
+         let shooter = MKMapSnapshotter(options: shot.options)
+         self.shooter = shooter
+         shooter.start(with: self.queue) { [weak self] in
+             guard let self = self else { return }
+             self.timer.schedule(deadline: .distantFuture)
+             do {
+                 if let error = $1 {
+                     throw error
+                 } else if let result = $0 {
+                     self.shots.removeLast()
+                     self.shoot()
+                     self.chunk(result.image.split(shot), z: shot.z)
+                     if self.shots.isEmpty {
+                         self.out.close()
+                         Argonaut.save(self)
+                         DispatchQueue.main.async { [weak self] in
+                             guard let item = self?.item else { return }
+                             self?.complete(item)
+                         }
+                     }
+                 } else {
+                     throw Fail("Couldn't create map")
+                 }
+             } catch let error {
+                 DispatchQueue.main.async { [weak self] in self?.error(error) }
+             }
+         }
+         */
     }
 }
 

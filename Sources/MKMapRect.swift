@@ -24,7 +24,8 @@ extension MKMapRect {
                                            y: y,
                                            z: z,
                                            width: width + 1,
-                                           height: height))
+                                           height: height,
+                                           proportion: proportion))
                         y += height
                     }
                     minX += width
