@@ -42,6 +42,7 @@ public final class Factory {
         guard let next = shots.last else { return }
         progress.send((total - .init(shots.count)) / total)
         timer.schedule(deadline: .now() + 10)
+        
         let shooter = MKMapSnapshotter(options: next.options)
         self.shooter = shooter
         
