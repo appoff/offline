@@ -7,7 +7,7 @@ final class TilesTests: XCTestCase {
         let x = 45356
         let y = 892002
         let value = "hello world"
-        let tiles = Map.Tiles(items: [.init(z) : [.init(x) : [.init(y) : .init(value.utf8)]]])
-        XCTAssertEqual(value, String(decoding: tiles.data.prototype(Map.Tiles.self)[x, y, z] ?? .init(), as: UTF8.self))
+        let tiles = Tiles(items: [.init(z) : [.init(x) : [.init(y) : .init(value.utf8)]]])
+        XCTAssertEqual(value, String(decoding: tiles.data.prototype(Tiles.self)[x, y, z] ?? .init(), as: UTF8.self))
     }
 }

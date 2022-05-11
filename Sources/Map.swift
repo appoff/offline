@@ -1,33 +1,21 @@
 import Foundation
 import Archivable
 
-public struct Map: Storable, Equatable {
-    public static let offloaded = Self(content: .init())
-    
-    private let content: Data
-//    public let title: String
-//    public let origin: String
-//    public let destination: String
-//    public let distance: UInt8
-//    public let duration: UInt8
-    
-    public var tiles: Tiles {
-        content.prototype()
-    }
+struct Map: Storable {
+    let item: Item
+    let tiles: Data
     
     public var data: Data {
         .init()
     }
     
     public init(data: inout Data) {
-        content = .init()
+        item = .offloaded
+        tiles = .init()
     }
     
-    init(tiles: Tiles) {
-        self.init(content: tiles.data)
-    }
-    
-    private init(content: Data) {
-        self.content = content
+    init(item: Item, tiles: Tiles) {
+        self.item = item
+        self.tiles = tiles.data
     }
 }
