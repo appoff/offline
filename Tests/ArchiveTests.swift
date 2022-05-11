@@ -29,4 +29,8 @@ final class ArchiveTests: XCTestCase {
         XCTAssertFalse(archive.settings.interest)
         XCTAssertTrue(archive.settings.rotate)
     }
+    
+    func testMaps() async {
+        
+    }
 }
