@@ -7,7 +7,6 @@ public final class Factory {
     public let finished = PassthroughSubject<Void, Never>()
     public let progress = CurrentValueSubject<_, Never>(Double())
     public let map: Map
-    private weak var shooter: MKMapSnapshotter?
     private var shots: [Shot]
     private var result = [UInt8 : [UInt32 : [UInt32 : Data]]]()
     private var canceled = false
@@ -25,17 +24,9 @@ public final class Factory {
             .rect
             .shots
         total = .init(shots.count)
-        
-        timer.activate()
-        timer.schedule(deadline: .distantFuture)
-        timer.setEventHandler { [weak self] in
-            self?.shooter?.cancel()
-            self?.fail.send()
-        }
     }
     
     deinit {
-        timer.cancel()
         print("factory gone")
     }
     
@@ -43,10 +34,8 @@ public final class Factory {
         print("Shoot")
         guard let next = shots.last else { return }
         progress.send((total - .init(shots.count)) / total)
-        timer.schedule(deadline: .now() + 10)
         
         let shooter = MKMapSnapshotter(options: next.options)
-        self.shooter = shooter
         
         do {
             let snapshot = try await shooter.start()
@@ -72,7 +61,5 @@ public final class Factory {
     @MainActor public func cancel() {
         canceled = true
         shots = []
-        timer.schedule(deadline: .distantFuture)
-        shooter?.cancel()
     }
 }
