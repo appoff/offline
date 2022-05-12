@@ -7,11 +7,11 @@ private let size = 256.0
 #endif
 
 extension MKMapSnapshotter.Snapshot {
-    func split(shot: Factory.Shot) -> [UInt32 : [UInt32 : Data]] {
+    func split(result: inout [UInt8 : [UInt32 : [UInt32 : Data]]], shot: Factory.Shot) {
         (1 ..< shot.width)
-            .reduce(into: [:]) { result, x in
-                result[.init(x + shot.x)] = (0 ..< shot.height)
-                    .reduce(into: [UInt32 : Data]()) { result, y in
+            .forEach { x in
+                (0 ..< shot.height)
+                    .forEach { y in
 #if os(iOS)
                         UIGraphicsBeginImageContext(.init(width: size, height: size))
                         UIGraphicsGetCurrentContext()!.translateBy(x: 0, y: size)
@@ -22,7 +22,7 @@ extension MKMapSnapshotter.Snapshot {
                                   width: .init(image.cgImage!.width),
                                   height: .init(image.cgImage!.height)))
                         
-                        result[.init(y + shot.y)] = UIImage(cgImage: UIGraphicsGetCurrentContext()!.makeImage()!).pngData()!
+                        result[.init(shot.z), default: [:]][.init(x + shot.x), default: [:]][.init(y + shot.y)] = UIImage(cgImage: UIGraphicsGetCurrentContext()!.makeImage()!).pngData()!
 
                         UIGraphicsEndImageContext()
                         
@@ -39,7 +39,7 @@ extension MKMapSnapshotter.Snapshot {
                              fraction: 1)
                         tile.unlockFocus()
                         
-                        result[.init(shot.y + shot.height - y - 1)] = NSBitmapImageRep(
+                        result[.init(shot.z), default: [:]][.init(x + shot.x), default: [:]][.init(shot.y + shot.height - y - 1)] = NSBitmapImageRep(
                             cgImage: tile.cgImage(forProposedRect: nil, context: nil, hints: nil)!)
                         .representation(using: .png, properties: [:])!
 #endif

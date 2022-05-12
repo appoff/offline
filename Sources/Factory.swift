@@ -40,7 +40,7 @@ public final class Factory {
             
             guard !canceled else { return }
             
-            result[.init(next.z)] = snapshot.split(shot: next)
+            snapshot.split(result: &result, shot: next)
             shots.removeLast()
             
             if shots.isEmpty {
