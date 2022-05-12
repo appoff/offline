@@ -8,6 +8,7 @@ public struct Archive: Arch {
 
     public var data: Data {
         .init()
+        .adding(size: UInt8.self, collection: maps)
         .adding(settings)
     }
     
@@ -22,7 +23,7 @@ public struct Archive: Arch {
         self.timestamp = timestamp
         
         if version == Self.version {
-            maps = []
+            maps = data.collection(size: UInt8.self)
             settings = .init(data: &data)
         } else {
             maps = []

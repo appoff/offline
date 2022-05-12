@@ -31,6 +31,9 @@ final class ArchiveTests: XCTestCase {
     }
     
     func testMaps() async {
-        
+        let map = Map(title: "Some", origin: "a", destination: "b", distance: 1, duration: 1)
+        archive.maps.append(map)
+        archive = await Archive.prototype(data: archive.compressed)
+        XCTAssertEqual(map.id, archive.maps.first?.id)
     }
 }
