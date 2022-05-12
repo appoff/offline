@@ -30,9 +30,9 @@ public struct Map: Storable, Identifiable {
     
     init(title: String, origin: String, destination: String, distance: UInt32, duration: UInt32) {
         id = .init()
-        self.title = title
-        self.origin = origin
-        self.destination = destination
+        self.title = title.max8
+        self.origin = origin.max8
+        self.destination = destination.max8
         self.distance = distance
         self.duration = duration
     }
