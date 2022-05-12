@@ -33,6 +33,7 @@ public final class Factory {
     }
     
     deinit {
+        timer.cancel()
         print("factory gone")
     }
     
@@ -68,6 +69,8 @@ public final class Factory {
     
     @MainActor public func cancel() {
         shots = []
+        timer.schedule(deadline: .distantFuture)
+        timer.setEventHandler(handler: nil)
         timer.cancel()
         shooter?.cancel()
     }
