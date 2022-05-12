@@ -16,7 +16,7 @@ public final class Factory {
     private let route: [MKRoute]
     private let timer = DispatchSource.makeTimerSource()
     
-    init(map: Map, points: [MKPointAnnotation], route: [MKRoute]) {
+    public init(map: Map, points: [MKPointAnnotation], route: [MKRoute]) {
         self.map = map
         self.points = points
         self.route = route
