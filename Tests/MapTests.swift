@@ -3,11 +3,12 @@ import XCTest
 
 final class MapTests: XCTestCase {
     func testParse() async {
-//        let z = 11
-//        let x = 45356
-//        let y = 892002
-//        let value = "hello world"
-//        let tiles = Map.Tiles(items: [.init(z) : [.init(x) : [.init(y) : .init(value.utf8)]]])
-//        XCTAssertEqual(value, String(decoding: tiles.data.prototype(Map.Tiles.self)[x, y, z] ?? .init(), as: UTF8.self))
+        let map = Map(title: "Test", origin: "Edinburgh", destination: "Glasgow", distance: 1234566, duration: 9876023)
+        let parsed = map.data.prototype(Map.self)
+        XCTAssertEqual(map.title, parsed.title)
+        XCTAssertEqual(map.origin, parsed.origin)
+        XCTAssertEqual(map.destination, parsed.destination)
+        XCTAssertEqual(map.distance, parsed.distance)
+        XCTAssertEqual(map.duration, parsed.duration)
     }
 }
