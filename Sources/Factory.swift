@@ -74,5 +74,6 @@ public final class Factory {
 //        timer.setEventHandler(handler: nil)
 //        timer.cancel()
         shooter?.cancel()
+        shooter = nil
     }
 }
