@@ -60,7 +60,7 @@ public final class Factory {
                 try Local().save(map: map, tiles: .init(items: result))
                 finished.send()
             } else {
-                await shoot()
+                resume.send()
             }
         } catch {
             fail.send()
