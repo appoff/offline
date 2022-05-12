@@ -1,8 +1,7 @@
 import MapKit
 import Combine
 
-public final class Factory {
-    public let resume = PassthroughSubject<Void, Never>()
+public struct Factory {
     public let fail = PassthroughSubject<Void, Never>()
     public let finished = PassthroughSubject<Void, Never>()
     public let progress = CurrentValueSubject<_, Never>(Double())
@@ -13,7 +12,6 @@ public final class Factory {
     private let total: Double
     private let points: [MKPointAnnotation]
     private let route: [MKRoute]
-    private let timer = DispatchSource.makeTimerSource()
     
     public init(map: Map, points: [MKPointAnnotation], route: [MKRoute]) {
         self.map = map
@@ -26,11 +24,7 @@ public final class Factory {
         total = .init(shots.count)
     }
     
-    deinit {
-        print("factory gone")
-    }
-    
-    @MainActor public func shoot() async {
+    @MainActor public mutating func shoot() async {
         print("Shoot")
         guard let next = shots.last else { return }
         progress.send((total - .init(shots.count)) / total)
@@ -42,7 +36,6 @@ public final class Factory {
             
             guard !canceled else { return }
             
-            timer.schedule(deadline: .distantFuture)
             result[.init(next.z)] = snapshot.split(shot: next)
             shots.removeLast()
             
@@ -54,11 +47,10 @@ public final class Factory {
             }
         } catch {
             fail.send()
-            timer.schedule(deadline: .distantFuture)
         }
     }
     
-    @MainActor public func cancel() {
+    @MainActor public mutating func cancel() {
         canceled = true
         shots = []
     }
