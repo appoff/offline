@@ -37,6 +37,7 @@ public final class Factory {
     }
     
     @MainActor public func shoot() async {
+        print("Shoot")
         guard let next = shots.last else { return }
         progress.send((total - .init(shots.count)) / total)
         timer.schedule(deadline: .now() + 10)
@@ -63,5 +64,11 @@ public final class Factory {
             fail.send()
             timer.schedule(deadline: .distantFuture)
         }
+    }
+    
+    @MainActor public func cancel() {
+        shots = []
+        timer.cancel()
+        shooter?.cancel()
     }
 }
