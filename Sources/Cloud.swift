@@ -1,6 +1,12 @@
 import Archivable
 
 extension Cloud where Output == Archive {
+    public func add(map: Map) async {
+        guard !model.maps.contains(map) else { return }
+        model.maps.append(map)
+        await stream()
+    }
+    
     public func update(scheme: Settings.Scheme) async {
         guard scheme != model.settings.scheme else { return }
         model.settings.scheme = scheme

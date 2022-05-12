@@ -1,7 +1,7 @@
 import Foundation
 import Archivable
 
-public struct Map: Storable, Identifiable {
+public struct Map: Storable, Identifiable, Equatable {
     public let id: UUID
     public let title: String
     public let origin: String

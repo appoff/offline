@@ -9,6 +9,18 @@ final class CloudTests: XCTestCase {
         cloud = .init()
     }
     
+    func testAddMap() async {
+        let map = Map(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
+        await cloud.add(map: map)
+        
+        var value = await cloud.model.maps
+        XCTAssertEqual(1, value.count)
+        
+        await cloud.add(map: map)
+        value = await cloud.model.maps
+        XCTAssertEqual(1, value.count)
+    }
+    
     func testScheme() async {
         await cloud.update(scheme: .dark)
         let value = await cloud.model.settings.scheme
