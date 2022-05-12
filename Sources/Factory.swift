@@ -2,7 +2,6 @@ import MapKit
 import Combine
 
 public final class Factory {
-    public let resume = PassthroughSubject<Void, Never>()
     public let fail = PassthroughSubject<Void, Never>()
     public let finished = PassthroughSubject<Void, Never>()
     public let progress = CurrentValueSubject<_, Never>(Double())
@@ -10,7 +9,6 @@ public final class Factory {
     private weak var shooter: MKMapSnapshotter?
     private var shots: [Shot]
     private var result = [UInt8 : [UInt32 : [UInt32 : Data]]]()
-    private var subs = Set<AnyCancellable>()
     private let total: Double
     private let points: [MKPointAnnotation]
     private let route: [MKRoute]
@@ -26,14 +24,6 @@ public final class Factory {
             .shots
         total = .init(shots.count)
         
-        resume
-            .sink { [weak self] in
-                Task { [weak self] in
-                    await self?.shoot()
-                }
-            }
-            .store(in: &subs)
-        
         timer.activate()
         timer.schedule(deadline: .distantFuture)
         timer.setEventHandler { [weak self] in
@@ -42,7 +32,11 @@ public final class Factory {
         }
     }
     
-    @MainActor private func shoot() async {
+    deinit {
+        print("factory gone")
+    }
+    
+    @MainActor public func shoot() async {
         guard let next = shots.last else { return }
         progress.send((total - .init(shots.count)) / total)
         timer.schedule(deadline: .now() + 10)
@@ -60,7 +54,10 @@ public final class Factory {
                 try Local().save(map: map, tiles: .init(items: result))
                 finished.send()
             } else {
-                resume.send()
+                Task
+                    .detached { [weak self] in
+                        await self?.shoot()
+                    }
             }
         } catch {
             fail.send()
