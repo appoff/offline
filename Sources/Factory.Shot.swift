@@ -4,11 +4,11 @@ private let tile = 256.0
 
 extension Factory {
     struct Shot {
-        private let x: Int
-        private let y: Int
-        private let z: Int
-        private let width: Int
-        private let height: Int
+        let x: Int
+        let y: Int
+        let z: Int
+        let width: Int
+        let height: Int
         private let proportion: Double
         
         init(x: Int, y: Int, z: Int, width: Int, height: Int, proportion: Double) {
@@ -28,6 +28,11 @@ extension Factory {
                                     y: .init(y) * proportion,
                                     width: .init(width) * proportion,
                                     height: .init(height) * proportion)
+#if os(iOS)
+            options.traitCollection = .init(traitsFrom: [.init(displayScale: 2), .init(userInterfaceStyle: .dark)])
+#elseif os(macOS)
+            options.appearance = NSAppearance(named: .darkAqua)
+#endif
             return options
         }
     }

@@ -28,7 +28,7 @@ public struct Map: Storable, Identifiable {
         duration = data.number()
     }
     
-    init(title: String, origin: String, destination: String, distance: UInt32, duration: UInt32) {
+    public init(title: String, origin: String, destination: String, distance: UInt32, duration: UInt32) {
         id = .init()
         self.title = title.max8
         self.origin = origin.max8
