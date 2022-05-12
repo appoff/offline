@@ -2,17 +2,18 @@ import MapKit
 import Combine
 
 public final class Factory {
+    public let resume = PassthroughSubject<Void, Never>()
     public let fail = PassthroughSubject<Void, Never>()
     public let finished = PassthroughSubject<Void, Never>()
     public let progress = CurrentValueSubject<_, Never>(Double())
     public let map: Map
-    private weak var shooter: MKMapSnapshotter?
+//    private weak var shooter: MKMapSnapshotter?
     private var shots: [Shot]
     private var result = [UInt8 : [UInt32 : [UInt32 : Data]]]()
     private let total: Double
     private let points: [MKPointAnnotation]
     private let route: [MKRoute]
-    private let timer = DispatchSource.makeTimerSource()
+//    private let timer = DispatchSource.makeTimerSource()
     
     public init(map: Map, points: [MKPointAnnotation], route: [MKRoute]) {
         self.map = map
@@ -24,16 +25,16 @@ public final class Factory {
             .shots
         total = .init(shots.count)
         
-        timer.activate()
-        timer.schedule(deadline: .distantFuture)
-        timer.setEventHandler { [weak self] in
-            self?.shooter?.cancel()
-            self?.fail.send()
-        }
+//        timer.activate()
+//        timer.schedule(deadline: .distantFuture)
+//        timer.setEventHandler { [weak self] in
+//            self?.shooter?.cancel()
+//            self?.fail.send()
+//        }
     }
     
     deinit {
-        timer.cancel()
+//        timer.cancel()
         print("factory gone")
     }
     
@@ -44,11 +45,11 @@ public final class Factory {
         timer.schedule(deadline: .now() + 10)
         
         let shooter = MKMapSnapshotter(options: next.options)
-        self.shooter = shooter
+//        self.shooter = shooter
         
         do {
             let snapshot = try await shooter.start()
-            timer.schedule(deadline: .distantFuture)
+//            timer.schedule(deadline: .distantFuture)
             result[.init(next.z)] = snapshot.split(shot: next)
             shots.removeLast()
             
@@ -63,15 +64,15 @@ public final class Factory {
             }
         } catch {
             fail.send()
-            timer.schedule(deadline: .distantFuture)
+//            timer.schedule(deadline: .distantFuture)
         }
     }
     
     @MainActor public func cancel() {
         shots = []
-        timer.schedule(deadline: .distantFuture)
-        timer.setEventHandler(handler: nil)
-        timer.cancel()
-        shooter?.cancel()
+//        timer.schedule(deadline: .distantFuture)
+//        timer.setEventHandler(handler: nil)
+//        timer.cancel()
+//        shooter?.cancel()
     }
 }
