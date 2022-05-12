@@ -51,7 +51,7 @@ public final class Factory {
             let snapshot = try await shooter.start()
 //            timer.schedule(deadline: .distantFuture)
             result[.init(next.z)] = snapshot.split(shot: next)
-            shots.removeLast()
+            _ = shots.popLast()
             
             if shots.isEmpty {
                 try Local().save(map: map, tiles: .init(items: result))
