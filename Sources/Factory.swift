@@ -6,11 +6,11 @@ public final class Factory {
     public let fail = PassthroughSubject<Void, Never>()
     public let finished = PassthroughSubject<Void, Never>()
     public let progress = CurrentValueSubject<_, Never>(Float())
+    public let map: Map
     private weak var shooter: MKMapSnapshotter?
     private var shots: [Shot]
     private var result = [UInt8 : [UInt32 : [UInt32 : Data]]]()
     private var subs = Set<AnyCancellable>()
-    private let map: Map
     private let total: Float
     private let points: [MKPointAnnotation]
     private let route: [MKRoute]
