@@ -57,10 +57,10 @@ public final class Factory {
                 try Local().save(map: map, tiles: .init(items: result))
                 finished.send()
             } else {
-                Task
-                    .detached { [weak self] in
-                        await self?.shoot()
-                    }
+//                Task
+//                    .detached { [weak self] in
+//                        await self?.shoot()
+//                    }
             }
         } catch {
             fail.send()
