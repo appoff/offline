@@ -7,7 +7,7 @@ public final class Factory {
     public let finished = PassthroughSubject<Void, Never>()
     public let progress = CurrentValueSubject<_, Never>(Double())
     public let map: Map
-//    private weak var shooter: MKMapSnapshotter?
+    private weak var shooter: MKMapSnapshotter?
     private var shots: [Shot]
     private var result = [UInt8 : [UInt32 : [UInt32 : Data]]]()
     private let total: Double
@@ -45,13 +45,13 @@ public final class Factory {
 //        timer.schedule(deadline: .now() + 10)
         
         let shooter = MKMapSnapshotter(options: next.options)
-//        self.shooter = shooter
+        self.shooter = shooter
         
         do {
             let snapshot = try await shooter.start()
 //            timer.schedule(deadline: .distantFuture)
             result[.init(next.z)] = snapshot.split(shot: next)
-            _ = shots.popLast()
+            shots.removeLast()
             
             if shots.isEmpty {
                 try Local().save(map: map, tiles: .init(items: result))
@@ -73,6 +73,6 @@ public final class Factory {
 //        timer.schedule(deadline: .distantFuture)
 //        timer.setEventHandler(handler: nil)
 //        timer.cancel()
-//        shooter?.cancel()
+        shooter?.cancel()
     }
 }
