@@ -44,8 +44,8 @@ public struct Tiles: Storable {
     
     init(items: [UInt8 : [UInt32 : [UInt32 : Data]]]) {
         print("z \(items.count)")
-        print("x \(items.map(\.value.count).max())")
-        print("y \(items.map(\.value).map(\.values.count).max())")
+        print("x \(items.map { $0.value.map { $0.key }.count }.max())")
+        print("y \(items.compactMap { $0.value.map { $0.value.map { $0.key }.count }.max() }.max())")
         
         self.items = items
     }
