@@ -29,6 +29,15 @@ public struct Tiles: Storable {
             })
     }
     
+    var thumbnail: Data {
+        items
+            .sorted {
+                $0.key < $1.key
+            }
+            .map(\.value.first!.value.first!.value)
+            .first!
+    }
+    
     public init(data: inout Data) {
         items = (0 ..< .init(data.number() as UInt8))
             .reduce(into: [:]) { z, _ in

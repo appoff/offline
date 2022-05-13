@@ -36,4 +36,13 @@ final class ArchiveTests: XCTestCase {
         archive = await Archive.prototype(data: archive.compressed)
         XCTAssertEqual(map.id, archive.maps.first?.id)
     }
+    
+    func testThumbnails() async {
+        let id = UUID()
+        let image = Data("hello world".utf8)
+        archive.thumbnails[id] = image
+        archive = await Archive.prototype(data: archive.compressed)
+        XCTAssertEqual(id, archive.thumbnails.first?.key)
+        XCTAssertEqual(image, archive.thumbnails.first?.value)
+    }
 }

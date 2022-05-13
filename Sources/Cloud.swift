@@ -1,9 +1,10 @@
 import Archivable
 
 extension Cloud where Output == Archive {
-    public func add(map: Map) async {
+    public func add(map: Map, tiles: Tiles) async {
         guard !model.maps.contains(map) else { return }
-        model.maps.append(map)
+        model.maps.insert(map, at: 0)
+        model.thumbnails[map.id] = tiles.thumbnail
         await stream()
     }
     

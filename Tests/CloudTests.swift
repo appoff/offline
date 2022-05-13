@@ -10,15 +10,27 @@ final class CloudTests: XCTestCase {
     }
     
     func testAddMap() async {
-        let map = Map(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
-        await cloud.add(map: map)
+        let data = Data("hello world".utf8)
+        let tiles = Tiles(items: [0 : [0 : [0 : data]]])
+        let map1 = Map(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
+        await cloud.add(map: map1, tiles: tiles)
         
-        var value = await cloud.model.maps
-        XCTAssertEqual(1, value.count)
+        var value = await cloud.model
+        XCTAssertEqual(1, value.maps.count)
+        XCTAssertEqual(data, value.thumbnails.first?.value)
+        XCTAssertEqual(data, value.thumbnails[map1.id])
         
-        await cloud.add(map: map)
-        value = await cloud.model.maps
-        XCTAssertEqual(1, value.count)
+        await cloud.add(map: map1, tiles: tiles)
+        value = await cloud.model
+        XCTAssertEqual(1, value.maps.count)
+        
+        
+        let map2 = Map(title: "hello", origin: "", destination: "", distance: 0, duration: 0)
+        await cloud.add(map: map2, tiles: tiles)
+        value = await cloud.model
+        XCTAssertEqual(2, value.maps.count)
+        XCTAssertEqual(2, value.thumbnails.count)
+        XCTAssertEqual(map2, value.maps.first)
     }
     
     func testScheme() async {
