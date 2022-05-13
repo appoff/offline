@@ -29,7 +29,7 @@ extension Factory {
                                     width: .init(width) * proportion,
                                     height: .init(height) * proportion)
 #if os(iOS)
-            options.traitCollection = .init(traitsFrom: [.init(displayScale: 2), .init(userInterfaceStyle: .dark)])
+            options.traitCollection = .init(traitsFrom: [.init(displayScale: 2), .init(userInterfaceStyle: .light)])
 #elseif os(macOS)
             options.appearance = NSAppearance(named: .darkAqua)
 #endif
