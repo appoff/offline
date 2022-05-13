@@ -43,7 +43,7 @@ extension MKMapRect {
         let x = Int(midX / proportion)
         let y = Int(midY / proportion)
         
-        return .init(x: x,
+        return .init(x: x - 1,
                      y: y,
                      z: z,
                      width: 1,
