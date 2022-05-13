@@ -1,7 +1,7 @@
 import MapKit
 import Combine
 
-public final class Factory {
+public struct Factory {
     public let fail = PassthroughSubject<Void, Never>()
     public let finished = PassthroughSubject<Void, Never>()
     public let progress = CurrentValueSubject<_, Never>(Double())
@@ -24,11 +24,7 @@ public final class Factory {
         total = .init(shots.count)
     }
     
-    deinit {
-        print("factory gone")
-    }
-    
-    @MainActor public func shoot() async {
+    @MainActor public mutating func shoot() async {
         print("Shoot")
         guard let next = shots.last else { return }
         progress.send((total - .init(shots.count)) / total)
@@ -54,7 +50,7 @@ public final class Factory {
         }
     }
     
-    @MainActor public func cancel() {
+    @MainActor public mutating func cancel() {
         canceled = true
         shots = []
     }
