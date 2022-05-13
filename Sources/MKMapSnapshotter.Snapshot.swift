@@ -25,37 +25,37 @@ extension MKMapSnapshotter.Snapshot {
     
     func data(x: Int, y: Int) -> Data {
 #if os(iOS)
-                        UIGraphicsBeginImageContext(.init(width: size, height: size))
-                        UIGraphicsGetCurrentContext()!.translateBy(x: 0, y: size)
-                        UIGraphicsGetCurrentContext()!.scaleBy(x: 1, y: -1)
-                        UIGraphicsGetCurrentContext()!.draw(image.cgImage!, in:
-                            .init(x: size * -.init(x),
-                                  y: (size * .init(y + 1)) - .init(image.cgImage!.height),
-                                  width: .init(image.cgImage!.width),
-                                  height: .init(image.cgImage!.height)))
-                        
-                        let result = UIImage(cgImage: UIGraphicsGetCurrentContext()!.makeImage()!).pngData()!
-
-                        UIGraphicsEndImageContext()
+        UIGraphicsBeginImageContext(.init(width: size, height: size))
+        UIGraphicsGetCurrentContext()!.translateBy(x: 0, y: size)
+        UIGraphicsGetCurrentContext()!.scaleBy(x: 1, y: -1)
+        UIGraphicsGetCurrentContext()!.draw(image.cgImage!, in:
+                .init(x: size * -.init(x),
+                      y: (size * .init(y + 1)) - .init(image.cgImage!.height),
+                      width: .init(image.cgImage!.width),
+                      height: .init(image.cgImage!.height)))
         
-                        return result
+        let result = UIImage(cgImage: UIGraphicsGetCurrentContext()!.makeImage()!).pngData()!
+        
+        UIGraphicsEndImageContext()
+        
+        return result
                         
 #elseif os(macOS)
-                        let tile = NSImage(size: .init(width: size, height: size))
-                        tile.lockFocus()
-                        image
-                            .draw(in: .init(x: 0, y: 0, width: size, height: size),
-                             from: .init(x: size * .init(x),
-                                         y: size * .init(y),
-                                         width: size,
-                                         height: size),
-                             operation: .copy,
-                             fraction: 1)
-                        tile.unlockFocus()
-                        
-                        return NSBitmapImageRep(
-                            cgImage: tile.cgImage(forProposedRect: nil, context: nil, hints: nil)!)
-                        .representation(using: .png, properties: [:])!
+        let tile = NSImage(size: .init(width: size, height: size))
+        tile.lockFocus()
+        image
+            .draw(in: .init(x: 0, y: 0, width: size, height: size),
+                  from: .init(x: size * .init(x),
+                              y: size * .init(y),
+                              width: size,
+                              height: size),
+                  operation: .copy,
+                  fraction: 1)
+        tile.unlockFocus()
+        
+        return NSBitmapImageRep(
+            cgImage: tile.cgImage(forProposedRect: nil, context: nil, hints: nil)!)
+        .representation(using: .png, properties: [:])!
 #endif
     }
 }
