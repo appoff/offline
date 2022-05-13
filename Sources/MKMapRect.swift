@@ -38,12 +38,12 @@ extension MKMapRect {
     }
     
     private var thumbnail: Factory.Shot {
-        let z = 10
+        let z = 12
         let proportion = MKMapRect.world.width / pow(2, .init(z))
         let x = Int(midX / proportion)
         let y = Int(midY / proportion)
         
-        return .init(x: x - 1,
+        return .init(x: x,
                      y: y,
                      z: z,
                      width: 1,
