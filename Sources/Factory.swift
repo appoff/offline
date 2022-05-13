@@ -7,6 +7,7 @@ public final class Factory {
     public let progress = CurrentValueSubject<_, Never>(Double())
     public let map: Map
     private var shots: [Shot]
+    private var thumbnail: Data?
     private var result = [UInt8 : [UInt32 : [UInt32 : Data]]]()
     private var canceled = false
     private let total: Double
@@ -35,11 +36,16 @@ public final class Factory {
             
             guard !canceled else { return }
             
-            snapshot.split(result: &result, shot: next)
+            if thumbnail == nil {
+                thumbnail = snapshot.data(x: 0, y: 0)
+            } else {
+                snapshot.split(result: &result, shot: next)
+            }
+            
             shots.removeLast()
             
             if shots.isEmpty {
-                let tiles = Tiles(items: result)
+                let tiles = Tiles(thumbnail: thumbnail!, items: result)
                 try Local().save(map: map, tiles: tiles)
                 finished.send(tiles)
             } else {

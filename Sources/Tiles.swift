@@ -2,10 +2,12 @@ import Foundation
 import Archivable
 
 public struct Tiles: Storable {
+    let thumbnail: Data
     private let items: [UInt8 : [UInt32 : [UInt32 : Data]]]
     
     public var data: Data {
         .init()
+        .wrapping(size: UInt32.self, data: thumbnail)
         .adding(UInt8(items.count))
         .adding(items
             .flatMap { z in
@@ -29,16 +31,8 @@ public struct Tiles: Storable {
             })
     }
     
-    var thumbnail: Data {
-        items
-            .sorted {
-                $0.key < $1.key
-            }
-            .map(\.value.first!.value.first!.value)
-            .first!
-    }
-    
     public init(data: inout Data) {
+        thumbnail = data.unwrap(size: UInt32.self)
         items = (0 ..< .init(data.number() as UInt8))
             .reduce(into: [:]) { z, _ in
                 z[data.number()] = (0 ..< .init(data.number() as UInt16))
@@ -51,7 +45,8 @@ public struct Tiles: Storable {
             }
     }
     
-    init(items: [UInt8 : [UInt32 : [UInt32 : Data]]]) {
+    init(thumbnail: Data, items: [UInt8 : [UInt32 : [UInt32 : Data]]]) {
+        self.thumbnail = thumbnail
         self.items = items
     }
     

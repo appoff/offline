@@ -13,6 +13,18 @@ extension MKMapSnapshotter.Snapshot {
                 (0 ..< shot.height)
                     .forEach { y in
 #if os(iOS)
+                        result[.init(shot.z), default: [:]][.init(x + shot.x), default: [:]][.init(y + shot.y)]
+                        = data(x: x, y: y)
+#elseif os(macOS)
+                        result[.init(shot.z), default: [:]][.init(x + shot.x), default: [:]][.init(shot.y + shot.height - y - 1)]
+                        = data(x: x, y: y)
+#endif
+                    }
+            }
+    }
+    
+    func data(x: Int, y: Int) -> Data {
+#if os(iOS)
                         UIGraphicsBeginImageContext(.init(width: size, height: size))
                         UIGraphicsGetCurrentContext()!.translateBy(x: 0, y: size)
                         UIGraphicsGetCurrentContext()!.scaleBy(x: 1, y: -1)
@@ -22,9 +34,11 @@ extension MKMapSnapshotter.Snapshot {
                                   width: .init(image.cgImage!.width),
                                   height: .init(image.cgImage!.height)))
                         
-                        result[.init(shot.z), default: [:]][.init(x + shot.x), default: [:]][.init(y + shot.y)] = UIImage(cgImage: UIGraphicsGetCurrentContext()!.makeImage()!).pngData()!
+                        let result = UIImage(cgImage: UIGraphicsGetCurrentContext()!.makeImage()!).pngData()!
 
                         UIGraphicsEndImageContext()
+        
+                        return result
                         
 #elseif os(macOS)
                         let tile = NSImage(size: .init(width: size, height: size))
@@ -39,11 +53,9 @@ extension MKMapSnapshotter.Snapshot {
                              fraction: 1)
                         tile.unlockFocus()
                         
-                        result[.init(shot.z), default: [:]][.init(x + shot.x), default: [:]][.init(shot.y + shot.height - y - 1)] = NSBitmapImageRep(
+                        return NSBitmapImageRep(
                             cgImage: tile.cgImage(forProposedRect: nil, context: nil, hints: nil)!)
                         .representation(using: .png, properties: [:])!
 #endif
-                    }
-            }
     }
 }
