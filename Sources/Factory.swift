@@ -1,6 +1,5 @@
 import MapKit
 import Combine
-import Archivable
 
 public final class Factory {
     public let fail = PassthroughSubject<Void, Never>()
@@ -22,7 +21,7 @@ public final class Factory {
         
         shots = (points.map(\.coordinate) + route.coordinate)
             .rect
-            .shots + points.last!.thumbnail
+            .shots
         total = .init(shots.count)
     }
     
@@ -30,30 +29,40 @@ public final class Factory {
         guard let next = shots.last else { return }
         progress.send((total - .init(shots.count)) / total)
         
-        let shooter = MKMapSnapshotter(options: next.options)
-        
-        do {
-            let snapshot = try await shooter.start()
+        if thumbnail == nil {
+            let shooter = MKMapSnapshotter(options: points.last!.options)
             
-            guard !canceled else { return }
-            
-            if thumbnail == nil {
+            do {
+                let snapshot = try await shooter.start()
+                
+                guard !canceled else { return }
+                
                 thumbnail = snapshot.data(x: 0, y: 0)
-            } else {
-                snapshot.split(result: &result, shot: next)
-            }
-            
-            shots.removeLast()
-            
-            if shots.isEmpty {
-                let tiles = Tiles(thumbnail: thumbnail!, items: result)
-                try Local().save(map: map, tiles: tiles)
-                finished.send(tiles)
-            } else {
                 await shoot()
+            } catch {
+                fail.send()
             }
-        } catch {
-            fail.send()
+        } else {
+            let shooter = MKMapSnapshotter(options: next.options)
+            
+            do {
+                let snapshot = try await shooter.start()
+                
+                guard !canceled else { return }
+                
+                snapshot.split(result: &result, shot: next)
+                shots.removeLast()
+                
+                if shots.isEmpty {
+                    let tiles = Tiles(thumbnail: thumbnail!, items: result)
+                    try Local().save(map: map, tiles: tiles)
+                    finished.send(tiles)
+                } else {
+                    await shoot()
+                }
+            } catch {
+                fail.send()
+            }
         }
     }
     
