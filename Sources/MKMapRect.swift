@@ -1,11 +1,10 @@
 import MapKit
-import Archivable
 
 private let padding = 2
 
 extension MKMapRect {
     var shots: [Factory.Shot] {
-        (14 ... 19)
+        (13 ... 19)
             .flatMap { z -> [Factory.Shot] in
                 let max = 10
                 let proportion = MKMapRect.world.width / pow(2, .init(z))
@@ -34,20 +33,5 @@ extension MKMapRect {
                 
                 return shots
             }
-        + thumbnail
-    }
-    
-    private var thumbnail: Factory.Shot {
-        let z = 13
-        let proportion = MKMapRect.world.width / pow(2, .init(z))
-        let x = Int(midX / proportion)
-        let y = Int(midY / proportion)
-        
-        return .init(x: x - 1,
-                     y: y,
-                     z: z,
-                     width: 1,
-                     height: 1,
-                     proportion: proportion)
     }
 }

@@ -1,5 +1,6 @@
 import MapKit
 import Combine
+import Archivable
 
 public final class Factory {
     public let fail = PassthroughSubject<Void, Never>()
@@ -21,7 +22,7 @@ public final class Factory {
         
         shots = (points.map(\.coordinate) + route.coordinate)
             .rect
-            .shots
+            .shots + points.last!.thumbnail
         total = .init(shots.count)
     }
     
