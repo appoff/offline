@@ -3,7 +3,7 @@ import Combine
 
 public final class Factory {
     public let fail = PassthroughSubject<Void, Never>()
-    public let finished = PassthroughSubject<Void, Never>()
+    public let finished = PassthroughSubject<Tiles, Never>()
     public let progress = CurrentValueSubject<_, Never>(Double())
     public let map: Map
     private var shots: [Shot]
@@ -39,8 +39,9 @@ public final class Factory {
             shots.removeLast()
             
             if shots.isEmpty {
-                try Local().save(map: map, tiles: .init(items: result))
-                finished.send()
+                let tiles = Tiles(items: result)
+                try Local().save(map: map, tiles: tiles)
+                finished.send(tiles)
             } else {
                 await shoot()
             }
