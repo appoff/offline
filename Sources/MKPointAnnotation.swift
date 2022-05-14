@@ -8,7 +8,7 @@ extension MKPointAnnotation {
         options.mapType = .standard
         options.size = .init(width: MKMapSnapshotter.Snapshot.thumbnail, height: MKMapSnapshotter.Snapshot.thumbnail)
         options.mapRect = .init(x: point.x - (proportion / 2),
-                                y: point.y - (proportion / 2),
+                                y: point.y - (proportion / 4),
                                 width: proportion,
                                 height: proportion)
         return options
