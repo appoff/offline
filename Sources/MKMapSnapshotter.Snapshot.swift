@@ -19,7 +19,7 @@ extension MKMapSnapshotter.Snapshot {
                                       width: .init(image.cgImage!.width),
                                       height: .init(image.cgImage!.height)))
                         
-                        result[.init(shot.z), default: [:]][.init(x + shot.x), default: [:]][.init(y + shot.y)] = UIImage(cgImage: UIGraphicsGetCurrentContext()!.makeImage()!).pngData()!
+                        result[.init(shot.z), default: [:]][.init(x + shot.x), default: [:]][.init(y + shot.y)] = UIImage(cgImage: UIGraphicsGetCurrentContext()!.makeImage()!).jpegData(compressionQuality: 1)!
                         
                         UIGraphicsEndImageContext()
 #elseif os(macOS)
@@ -57,7 +57,7 @@ extension MKMapSnapshotter.Snapshot {
                       width: .init(image.cgImage!.width),
                       height: .init(image.cgImage!.height)))
         
-        let result = UIImage(cgImage: UIGraphicsGetCurrentContext()!.makeImage()!).pngData()!
+        let result = UIImage(cgImage: UIGraphicsGetCurrentContext()!.makeImage()!).jpegData(compressionQuality: 1)!
         
         UIGraphicsEndImageContext()
         
