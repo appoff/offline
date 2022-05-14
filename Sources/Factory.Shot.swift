@@ -22,7 +22,6 @@ extension Factory {
         
         var options: MKMapSnapshotter.Options {
             let options = MKMapSnapshotter.Options()
-            options.mapType = .standard
             options.size = .init(width: Self.tile * .init(width), height: Self.tile * .init(height))
             options.mapRect = .init(x: .init(x) * proportion,
                                     y: .init(y) * proportion,
