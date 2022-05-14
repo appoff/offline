@@ -1,7 +1,7 @@
 import MapKit
 
 extension MKMapSnapshotter.Snapshot {
-    static let thumbnail = 400.0
+    static let thumbnail = 512.0
     
     func split(result: inout [UInt8 : [UInt32 : [UInt32 : Data]]], shot: Factory.Shot) {
         (1 ..< shot.width)
