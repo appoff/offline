@@ -1,9 +1,9 @@
 import MapKit
 
-private let tile = 256.0
-
 extension Factory {
     struct Shot {
+        static let tile = 256.0
+        
         let x: Int
         let y: Int
         let z: Int
@@ -23,16 +23,11 @@ extension Factory {
         var options: MKMapSnapshotter.Options {
             let options = MKMapSnapshotter.Options()
             options.mapType = .standard
-            options.size = .init(width: tile * .init(width), height: tile * .init(height))
+            options.size = .init(width: Self.tile * .init(width), height: Self.tile * .init(height))
             options.mapRect = .init(x: .init(x) * proportion,
                                     y: .init(y) * proportion,
                                     width: .init(width) * proportion,
                                     height: .init(height) * proportion)
-#if os(iOS)
-            options.traitCollection = .init(traitsFrom: [.init(displayScale: 2), .init(userInterfaceStyle: .light)])
-#elseif os(macOS)
-            options.appearance = NSAppearance(named: .darkAqua)
-#endif
             return options
         }
     }

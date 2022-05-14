@@ -13,11 +13,13 @@ public final class Factory {
     private let total: Double
     private let points: [MKPointAnnotation]
     private let route: [MKRoute]
+    private let settings: Settings
     
-    public init(map: Map, points: [MKPointAnnotation], route: [MKRoute]) {
+    public init(map: Map, points: [MKPointAnnotation], route: [MKRoute], settings: Settings) {
         self.map = map
         self.points = points
         self.route = route
+        self.settings = settings
         
         shots = (points.map(\.coordinate) + route.coordinate)
             .rect
@@ -30,20 +32,20 @@ public final class Factory {
         progress.send((total - .init(shots.count)) / total)
         
         if thumbnail == nil {
-            let shooter = MKMapSnapshotter(options: points.last!.options)
+            let shooter = MKMapSnapshotter(options: points.last!.options.configure(settings: settings))
             
             do {
                 let snapshot = try await shooter.start()
                 
                 guard !canceled else { return }
                 
-                thumbnail = snapshot.data(x: 0, y: 0)
+                thumbnail = snapshot.thumbnail
                 await shoot()
             } catch {
                 fail.send()
             }
         } else {
-            let shooter = MKMapSnapshotter(options: next.options)
+            let shooter = MKMapSnapshotter(options: next.options.configure(settings: settings))
             
             do {
                 let snapshot = try await shooter.start()
