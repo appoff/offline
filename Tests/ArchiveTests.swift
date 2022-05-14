@@ -18,14 +18,14 @@ final class ArchiveTests: XCTestCase {
         
         archive.settings.scheme = .dark
         archive.settings.map = .emphasis
-        archive.settings.directions = .transit
+        archive.settings.directions = .driving
         archive.settings.interest = false
         archive.settings.rotate = true
         archive = await Archive.prototype(data: archive.compressed)
         
         XCTAssertEqual(.dark, archive.settings.scheme)
         XCTAssertEqual(.emphasis, archive.settings.map)
-        XCTAssertEqual(.transit, archive.settings.directions)
+        XCTAssertEqual(.driving, archive.settings.directions)
         XCTAssertFalse(archive.settings.interest)
         XCTAssertTrue(archive.settings.rotate)
     }
