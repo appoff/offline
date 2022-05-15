@@ -16,16 +16,20 @@ public struct Local {
         directory = url
     }
     
-    public func load(map: Map) -> Tiles? {
-        let url = directory.appendingPathComponent(map.id.uuidString)
-        
-        guard
-            FileManager.default.fileExists(atPath: url.path),
-            var data = try? Data(contentsOf: url),
-            !data.isEmpty
-        else { return nil }
-        
-        return .init(data: &data)
+    public func load(map: Map) async -> Data? {
+        await Task
+            .detached(priority: .utility) {
+                let url = directory.appendingPathComponent(map.id.uuidString)
+                
+                guard
+                    FileManager.default.fileExists(atPath: url.path),
+                    let data = try? Data(contentsOf: url),
+                    !data.isEmpty
+                else { return nil }
+                
+                return data
+            }
+            .value
     }
     
     func save(map: Map, tiles: Tiles) throws {
