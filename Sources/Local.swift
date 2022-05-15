@@ -16,6 +16,18 @@ public struct Local {
         directory = url
     }
     
+    public func load(map: Map) -> Tiles? {
+        let url = directory.appendingPathComponent(map.id.uuidString)
+        
+        guard
+            FileManager.default.fileExists(atPath: url.path),
+            var data = try? Data(contentsOf: url),
+            !data.isEmpty
+        else { return nil }
+        
+        return .init(data: &data)
+    }
+    
     func save(map: Map, tiles: Tiles) throws {
         try tiles
             .data
