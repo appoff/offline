@@ -32,6 +32,15 @@ public struct Local {
             .value
     }
     
+    public func delete(map: Map) {
+        Task
+            .detached(priority: .utility) {
+                let url = directory.appendingPathComponent(map.id.uuidString)
+                guard FileManager.default.fileExists(atPath: url.path) else { return }
+                try? FileManager.default.removeItem(at: url)
+            }
+    }
+    
     func save(map: Map, tiles: Tiles) throws {
         try tiles
             .data

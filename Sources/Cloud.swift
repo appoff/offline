@@ -8,6 +8,12 @@ extension Cloud where Output == Archive {
         await stream()
     }
     
+    public func delete(map: Map) async {
+        model.maps.remove { $0.id == map.id }
+        model.thumbnails.removeValue(forKey: map.id)
+        await stream()
+    }
+    
     public func update(scheme: Settings.Scheme) async {
         guard scheme != model.settings.scheme else { return }
         model.settings.scheme = scheme
