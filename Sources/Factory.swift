@@ -32,7 +32,7 @@ public final class Factory {
         progress.send((total - .init(shots.count)) / total)
         
         if thumbnail == nil {
-            let shooter = MKMapSnapshotter(options: points.last!.options.configure(settings: settings))
+            let shooter = MKMapSnapshotter(options: points.last!.thumbnail.configure(settings: settings))
             
             do {
                 let snapshot = try await shooter.start()
@@ -58,8 +58,8 @@ public final class Factory {
                 if shots.isEmpty {
                     let tiles = Tiles(thumbnail: thumbnail!,
                                       items: result,
-                                      points: [],
-                                      route: [],
+                                      points: points.map(\.point),
+                                      route: route.map(\.route),
                                       settings: settings)
                     try Local().save(map: map, tiles: tiles)
                     finished.send(tiles)

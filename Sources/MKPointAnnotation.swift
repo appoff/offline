@@ -1,7 +1,7 @@
 import MapKit
 
 extension MKPointAnnotation {
-    var options: MKMapSnapshotter.Options {
+    var thumbnail: MKMapSnapshotter.Options {
         let point = MKMapPoint(coordinate)
         let proportion = MKMapRect.world.width / pow(2, .init(16))
         let options = MKMapSnapshotter.Options()
@@ -12,5 +12,9 @@ extension MKPointAnnotation {
                                 width: proportion,
                                 height: proportion)
         return options
+    }
+    
+    var point: Tiles.Point {
+        .init(title: title ?? "", subtitle: subtitle ?? "", coordinate: coordinate.coordinate)
     }
 }
