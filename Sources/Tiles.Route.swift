@@ -1,4 +1,4 @@
-import Foundation
+import MapKit
 import Archivable
 
 extension Tiles {
@@ -6,6 +6,10 @@ extension Tiles {
         let distance: UInt32
         let duration: UInt32
         let coordinates: [Coordinate]
+
+        var polyline: MKPolyline {
+            .init(coordinates: coordinates.map(\.coordinate), count: coordinates.count)
+        }
         
         var data: Data {
             .init()

@@ -1,4 +1,4 @@
-import Foundation
+import MapKit
 import Archivable
 
 public struct Tiles: Storable {
@@ -6,6 +6,14 @@ public struct Tiles: Storable {
     let route: [Route]
     let thumbnail: Data
     private let items: [UInt8 : [UInt32 : [UInt32 : Data]]]
+    
+    public var annotations: [MKAnnotation] {
+        points.map(\.annotation)
+    }
+    
+    public var polyline: MKMultiPolyline {
+        .init(route.map(\.polyline))
+    }
     
     public var data: Data {
         .init()

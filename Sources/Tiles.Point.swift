@@ -1,4 +1,4 @@
-import Foundation
+import MapKit
 import Archivable
 
 extension Tiles {
@@ -6,6 +6,14 @@ extension Tiles {
         let title: String
         let subtitle: String
         let coordinate: Coordinate
+        
+        var annotation: MKPointAnnotation {
+            let result = MKPointAnnotation()
+            result.coordinate = coordinate.coordinate
+            result.title = title
+            result.subtitle = subtitle
+            return result
+        }
         
         var data: Data {
             .init()
