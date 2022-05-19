@@ -59,7 +59,8 @@ public final class Factory {
                     let tiles = Tiles(thumbnail: thumbnail!,
                                       items: result,
                                       points: [],
-                                      route: [])
+                                      route: [],
+                                      settings: settings)
                     try Local().save(map: map, tiles: tiles)
                     finished.send(tiles)
                 } else {

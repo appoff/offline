@@ -3,6 +3,9 @@ import XCTest
 
 final class TilesTests: XCTestCase {
     func testParse() async {
+        var settings = Settings()
+        settings.map = .emphasis
+        
         let z = 11
         let x = 45356
         let y = 892002
@@ -11,7 +14,8 @@ final class TilesTests: XCTestCase {
         let tiles = Tiles(thumbnail: thumbnail,
                           items: [.init(z) : [.init(x) : [.init(y) : .init(value.utf8)]]],
                           points: [.init(title: "hello", subtitle: "lorem", coordinate: .init(latitude: 1, longitude: 2))],
-                          route: [.init(distance: 3, duration: 4, coordinates: [.init(latitude: 4, longitude: 5)])])
+                          route: [.init(distance: 3, duration: 4, coordinates: [.init(latitude: 4, longitude: 5)])],
+                          settings: settings)
         let parsed = tiles.data.prototype(Tiles.self)
         XCTAssertEqual(value, String(decoding: parsed[x, y, z] ?? .init(), as: UTF8.self))
         XCTAssertEqual(thumbnail, tiles.thumbnail)
@@ -23,5 +27,6 @@ final class TilesTests: XCTestCase {
         XCTAssertEqual(4, parsed.route.first?.duration)
         XCTAssertEqual(4, parsed.route.first?.coordinates.first?.latitude)
         XCTAssertEqual(5, parsed.route.first?.coordinates.first?.longitude)
+        XCTAssertEqual(.emphasis, parsed.settings.map)
     }
 }
