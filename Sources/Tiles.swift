@@ -8,7 +8,7 @@ public struct Tiles: Storable {
     let thumbnail: Data
     private let items: [UInt8 : [UInt32 : [UInt32 : Data]]]
     
-    public var annotations: [MKAnnotation] {
+    public var annotations: [MKPointAnnotation] {
         points.map(\.annotation)
     }
     
