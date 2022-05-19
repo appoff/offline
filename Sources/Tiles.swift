@@ -2,9 +2,9 @@ import MapKit
 import Archivable
 
 public struct Tiles: Storable {
+    public let route: [Route]
     public let settings: Settings
     let points: [Point]
-    let route: [Route]
     let thumbnail: Data
     private let items: [UInt8 : [UInt32 : [UInt32 : Data]]]
     
