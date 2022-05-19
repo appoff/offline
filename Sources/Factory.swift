@@ -21,7 +21,7 @@ public final class Factory {
         self.route = route
         self.settings = settings
         
-        shots = (points.map(\.coordinate) + route.coordinate)
+        shots = (points.map(\.coordinate) + route.flatMap(\.coordinate))
             .rect
             .shots
         total = .init(shots.count)
@@ -56,7 +56,10 @@ public final class Factory {
                 shots.removeLast()
                 
                 if shots.isEmpty {
-                    let tiles = Tiles(thumbnail: thumbnail!, items: result)
+                    let tiles = Tiles(thumbnail: thumbnail!,
+                                      items: result,
+                                      points: [],
+                                      route: [])
                     try Local().save(map: map, tiles: tiles)
                     finished.send(tiles)
                 } else {

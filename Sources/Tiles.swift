@@ -2,11 +2,15 @@ import Foundation
 import Archivable
 
 public struct Tiles: Storable {
+    let points: [Point]
+    let route: [Route]
     let thumbnail: Data
     private let items: [UInt8 : [UInt32 : [UInt32 : Data]]]
     
     public var data: Data {
         .init()
+        .adding(size: UInt8.self, collection: points)
+        .adding(size: UInt8.self, collection: route)
         .wrapping(size: UInt32.self, data: thumbnail)
         .adding(UInt8(items.count))
         .adding(items
@@ -32,6 +36,8 @@ public struct Tiles: Storable {
     }
     
     public init(data: inout Data) {
+        points = data.collection(size: UInt8.self)
+        route = data.collection(size: UInt8.self)
         thumbnail = data.unwrap(size: UInt32.self)
         items = (0 ..< .init(data.number() as UInt8))
             .reduce(into: [:]) { z, _ in
@@ -45,9 +51,14 @@ public struct Tiles: Storable {
             }
     }
     
-    init(thumbnail: Data, items: [UInt8 : [UInt32 : [UInt32 : Data]]]) {
+    init(thumbnail: Data,
+         items: [UInt8 : [UInt32 : [UInt32 : Data]]],
+         points: [Point],
+         route: [Route]) {
         self.thumbnail = thumbnail
         self.items = items
+        self.points = points
+        self.route = route
     }
     
     public subscript(x: Int, y: Int, z: Int) -> Data? {

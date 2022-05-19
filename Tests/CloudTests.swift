@@ -11,7 +11,7 @@ final class CloudTests: XCTestCase {
     
     func testAddMap() async {
         let data = Data("hello world".utf8)
-        let tiles = Tiles(thumbnail: data, items: [0 : [0 : [0 : .init()]]])
+        let tiles = Tiles(thumbnail: data, items: [0 : [0 : [0 : .init()]]], points: [], route: [])
         let map1 = Map(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
         await cloud.add(map: map1, tiles: tiles)
         
@@ -34,7 +34,7 @@ final class CloudTests: XCTestCase {
     
     func testDeleteMap() async {
         let data = Data("hello world".utf8)
-        let tiles = Tiles(thumbnail: data, items: [0 : [0 : [0 : .init()]]])
+        let tiles = Tiles(thumbnail: data, items: [0 : [0 : [0 : .init()]]], points: [], route: [])
         let map = Map(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
         await cloud.add(map: map, tiles: tiles)
         await cloud.delete(map: map)
