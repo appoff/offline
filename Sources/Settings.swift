@@ -2,7 +2,7 @@ import Foundation
 import Archivable
 
 public struct Settings: Storable {
-    public internal(set) var scheme: Scheme
+    public var scheme: Scheme
     public internal(set) var map: Map
     public internal(set) var directions: Directions
     public internal(set) var interest: Bool
