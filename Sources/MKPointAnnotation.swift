@@ -14,7 +14,7 @@ extension MKPointAnnotation {
         return options
     }
     
-    var point: Tiles.Point {
+    var point: Point {
         .init(title: title ?? "", subtitle: subtitle ?? "", coordinate: coordinate.coordinate)
     }
 }

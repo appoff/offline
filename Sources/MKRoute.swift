@@ -6,7 +6,7 @@ extension MKRoute {
             .map(\.coordinate)
     }
     
-    var route: Tiles.Route {
+    var route: Route {
         .init(distance: .init(distance), duration: .init(expectedTravelTime), coordinates: coordinate.map(\.coordinate))
     }
 }

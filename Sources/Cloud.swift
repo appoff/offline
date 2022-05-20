@@ -1,16 +1,13 @@
 import Archivable
 
 extension Cloud where Output == Archive {
-    public func add(map: Map, tiles: Tiles) async {
-        guard !model.maps.contains(map) else { return }
-        model.maps.insert(map, at: 0)
-        model.thumbnails[map.id] = tiles.thumbnail
+    public func add(map: Map, signature: Signature?) async {
+        model.maps[map] = signature
         await stream()
     }
     
     public func delete(map: Map) async {
-        model.maps.remove { $0.id == map.id }
-        model.thumbnails.removeValue(forKey: map.id)
+        model.maps.removeValue(forKey: map)
         await stream()
     }
     

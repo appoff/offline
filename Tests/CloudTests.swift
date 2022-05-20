@@ -10,26 +10,19 @@ final class CloudTests: XCTestCase {
     }
     
     func testAddMap() async {
-        let data = Data("hello world".utf8)
-        let tiles = Tiles(thumbnail: data, items: [0 : [0 : [0 : .init()]]], points: [], route: [], settings: .init())
-        let map1 = Map(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
-        await cloud.add(map: map1, tiles: tiles)
+        let signature = Signature(route: [], settings: .init(), thumbnail: .init(), points: [], tiles: [:])
+        
+        let map = Map(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
+        await cloud.add(map: map, signature: nil)
         
         var value = await cloud.model
         XCTAssertEqual(1, value.maps.count)
-        XCTAssertEqual(data, value.thumbnails.first?.value)
-        XCTAssertEqual(data, value.thumbnails[map1.id])
+        XCTAssertNil(value.maps[map] as? Signature)
         
-        await cloud.add(map: map1, tiles: tiles)
+        await cloud.add(map: map, signature: signature)
         value = await cloud.model
         XCTAssertEqual(1, value.maps.count)
-        
-        let map2 = Map(title: "hello", origin: "", destination: "", distance: 0, duration: 0)
-        await cloud.add(map: map2, tiles: tiles)
-        value = await cloud.model
-        XCTAssertEqual(2, value.maps.count)
-        XCTAssertEqual(2, value.thumbnails.count)
-        XCTAssertEqual(map2, value.maps.first)
+        XCTAssertNotNil(value.maps[map] as? Signature)
     }
     
     func testDeleteMap() async {

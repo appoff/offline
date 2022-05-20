@@ -8,7 +8,7 @@ public final class Factory {
     public let map: Map
     private var shots: [Shot]
     private var thumbnail: Data?
-    private var result = [UInt8 : [UInt32 : [UInt32 : Data]]]()
+    private var result = [UInt8 : [UInt32 : [UInt32 : UInt32]]]()
     private var canceled = false
     private let total: Double
     private let points: [MKPointAnnotation]
@@ -52,20 +52,20 @@ public final class Factory {
                 
                 guard !canceled else { return }
                 
-                snapshot.split(result: &result, shot: next)
-                shots.removeLast()
-                
-                if shots.isEmpty {
-                    let tiles = Tiles(thumbnail: thumbnail!,
-                                      items: result,
-                                      points: points.map(\.point),
-                                      route: route.map(\.route),
-                                      settings: settings)
-                    try Local().save(map: map, tiles: tiles)
-                    finished.send(tiles)
-                } else {
-                    await shoot()
-                }
+//                snapshot.split(result: &result, shot: next)
+//                shots.removeLast()
+//                
+//                if shots.isEmpty {
+//                    let tiles = Tiles(thumbnail: thumbnail!,
+//                                      items: result,
+//                                      points: points.map(\.point),
+//                                      route: route.map(\.route),
+//                                      settings: settings)
+//                    try Local().save(map: map, tiles: tiles)
+//                    finished.send(tiles)
+//                } else {
+//                    await shoot()
+//                }
             } catch {
                 fail.send()
             }
