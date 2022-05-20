@@ -41,9 +41,7 @@ public struct Local {
             }
     }
     
-    func save(map: Map, tiles: Tiles) throws {
-        try tiles
-            .data
-            .write(to: directory.appendingPathComponent(map.id.uuidString), options: .atomic)
+    func url(map: Map) -> URL {
+        directory.appendingPathComponent(map.id.uuidString)
     }
 }
