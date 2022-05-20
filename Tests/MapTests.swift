@@ -11,6 +11,7 @@ final class MapTests: XCTestCase {
         XCTAssertEqual(map.destination, parsed.destination)
         XCTAssertEqual(map.distance, parsed.distance)
         XCTAssertEqual(map.duration, parsed.duration)
+        XCTAssertEqual(map.date, parsed.date)
     }
     
     func testCap() {

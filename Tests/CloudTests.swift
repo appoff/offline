@@ -17,24 +17,21 @@ final class CloudTests: XCTestCase {
         
         var value = await cloud.model
         XCTAssertEqual(1, value.maps.count)
-        XCTAssertNil(value.maps[map] as? Signature)
+        XCTAssertNil(value.maps.first?.signature)
         
         await cloud.add(map: map, signature: signature)
         value = await cloud.model
         XCTAssertEqual(1, value.maps.count)
-        XCTAssertNotNil(value.maps[map] as? Signature)
+        XCTAssertNotNil(value.maps.first?.signature)
     }
     
     func testDeleteMap() async {
-        let data = Data("hello world".utf8)
-        let tiles = Tiles(thumbnail: data, items: [0 : [0 : [0 : .init()]]], points: [], route: [], settings: .init())
         let map = Map(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
-        await cloud.add(map: map, tiles: tiles)
+        await cloud.add(map: map, signature: nil)
         await cloud.delete(map: map)
         
         let value = await cloud.model
         XCTAssertTrue(value.maps.isEmpty)
-        XCTAssertTrue(value.thumbnails.isEmpty)
     }
     
     func testScheme() async {

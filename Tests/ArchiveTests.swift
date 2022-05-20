@@ -31,18 +31,16 @@ final class ArchiveTests: XCTestCase {
     }
     
     func testMaps() async {
-        let map = Map(title: "Some", origin: "a", destination: "b", distance: 1, duration: 1)
-        archive.maps.append(map)
+        let map1 = Map(title: "Some", origin: "a", destination: "b", distance: 1, duration: 1)
+        let map2 = Map(title: "abc", origin: "fsd", destination: "465645", distance: 3, duration: 3)
+        let signature = Signature(route: [], settings: .init(), thumbnail: .init(), points: [], tiles: [:])
+        archive.maps.append(.init(map: map1, signature: signature))
+        archive.maps.append(.init(map: map2, signature: nil))
         archive = await Archive.prototype(data: archive.compressed)
-        XCTAssertEqual(map.id, archive.maps.first?.id)
-    }
-    
-    func testThumbnails() async {
-        let id = UUID()
-        let image = Data("hello world".utf8)
-        archive.thumbnails[id] = image
-        archive = await Archive.prototype(data: archive.compressed)
-        XCTAssertEqual(id, archive.thumbnails.first?.key)
-        XCTAssertEqual(image, archive.thumbnails.first?.value)
+        XCTAssertEqual(2, archive.maps.count)
+        XCTAssertEqual(map1.id, archive.maps.first?.id)
+        XCTAssertEqual(map2.id, archive.maps.last?.id)
+        XCTAssertNil(archive.maps.last?.signature)
+        XCTAssertNotNil(archive.maps.first?.signature)
     }
 }
