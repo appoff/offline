@@ -16,7 +16,7 @@ public struct Local {
         directory = url
     }
     
-    public func load(map: Map) async -> Data? {
+    public func size(map: Map) async -> Int? {
         await Task
             .detached(priority: .utility) {
                 let url = directory.appendingPathComponent(map.id.uuidString)
@@ -27,7 +27,7 @@ public struct Local {
                     !data.isEmpty
                 else { return nil }
                 
-                return data
+                return data.count
             }
             .value
     }
