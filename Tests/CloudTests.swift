@@ -10,7 +10,7 @@ final class CloudTests: XCTestCase {
     }
     
     func testAddMap() async {
-        let signature = Signature(route: [], settings: .init(), thumbnail: .init(), points: [], tiles: [:])
+        let signature = Signature(settings: .init(), thumbnail: .init(), points: [], tiles: [:])
         
         let map = Map(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
         await cloud.add(map: map, signature: nil)

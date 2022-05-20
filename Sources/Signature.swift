@@ -2,7 +2,6 @@ import MapKit
 import Archivable
 
 public struct Signature: Storable {
-    public let route: [Route]
     public let settings: Settings
     public let thumbnail: Data
     let points: [Point]
@@ -12,17 +11,19 @@ public struct Signature: Storable {
         content.prototype()
     }
     
-    public var annotations: [MKPointAnnotation] {
-        points.map(\.annotation)
+    public var annotations: [(point: MKPointAnnotation, route: Route?)] {
+        points
+            .map {
+                (point: $0.annotation, route: $0.route)
+            }
     }
     
     public var polyline: MKMultiPolyline {
-        .init(route.map(\.polyline))
+        .init(points.compactMap(\.route?.polyline))
     }
     
     public var data: Data {
         .init()
-        .adding(size: UInt8.self, collection: route)
         .adding(settings)
         .wrapping(size: UInt32.self, data: thumbnail)
         .adding(size: UInt8.self, collection: points)
@@ -30,19 +31,16 @@ public struct Signature: Storable {
     }
     
     public init(data: inout Data) {
-        route = data.collection(size: UInt8.self)
         settings = .init(data: &data)
         thumbnail = data.unwrap(size: UInt32.self)
         points = data.collection(size: UInt8.self)
         content = data.unwrap(size: UInt32.self)
     }
     
-    init(route: [Route],
-         settings: Settings,
+    init(settings: Settings,
          thumbnail: Data,
          points: [Point],
          tiles: [UInt8 : [UInt32 : [UInt32 : (offset: UInt32, size: UInt32)]]]) {
-        self.route = route
         self.settings = settings
         self.thumbnail = thumbnail
         self.points = points

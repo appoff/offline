@@ -14,10 +14,17 @@ final class SignatureTests: XCTestCase {
         
         let thumbnail = Data("lorem ipsum".utf8)
         let signature = Signature(
-            route: [.init(distance: 3, duration: 4, coordinates: [.init(latitude: 4, longitude: 5)])],
             settings: settings,
             thumbnail: thumbnail,
-            points: [.init(title: "hello", subtitle: "lorem", coordinate: .init(latitude: 1, longitude: 2))],
+            points: [.init(title: "hello",
+                           subtitle: "lorem",
+                           coordinate: .init(latitude: 1, longitude: 2),
+                           route: .init(distance: 3, duration: 4, coordinates: [.init(latitude: 4, longitude: 5)])),
+                     .init(title: "a123",
+                                    subtitle: "ffs",
+                                    coordinate: .init(latitude: 3, longitude: 4),
+                                    route: nil)
+            ],
             tiles: [.init(z) : [.init(x) : [.init(y) : (offset: offset, size: size)]]])
         
         let parsed = signature.data.prototype(Signature.self)
@@ -29,10 +36,11 @@ final class SignatureTests: XCTestCase {
         XCTAssertEqual("lorem", parsed.points.first?.subtitle)
         XCTAssertEqual(1, parsed.points.first?.coordinate.latitude)
         XCTAssertEqual(2, parsed.points.first?.coordinate.longitude)
-        XCTAssertEqual(3, parsed.route.first?.distance)
-        XCTAssertEqual(4, parsed.route.first?.duration)
-        XCTAssertEqual(4, parsed.route.first?.coordinates.first?.latitude)
-        XCTAssertEqual(5, parsed.route.first?.coordinates.first?.longitude)
+        XCTAssertEqual(3, parsed.points.first?.route?.distance)
+        XCTAssertEqual(4, parsed.points.first?.route?.duration)
+        XCTAssertEqual(4, parsed.points.first?.route?.coordinates.first?.latitude)
+        XCTAssertEqual(5, parsed.points.first?.route?.coordinates.first?.longitude)
+        XCTAssertNil(parsed.points.last?.route)
         XCTAssertEqual(.emphasis, parsed.settings.map)
     }
 }

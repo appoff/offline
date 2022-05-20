@@ -13,8 +13,4 @@ extension MKPointAnnotation {
                                 height: proportion)
         return options
     }
-    
-    var point: Point {
-        .init(title: title ?? "", subtitle: subtitle ?? "", coordinate: coordinate.coordinate)
-    }
 }

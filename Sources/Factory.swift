@@ -13,17 +13,17 @@ public final class Factory {
     private var result = [UInt8 : [UInt32 : [UInt32 : (offset: UInt32, size: UInt32)]]]()
     private let total: Double
     private let points: [MKPointAnnotation]
-    private let route: [MKRoute]
+    private let route: Set<Routing>
     private let settings: Settings
     private let output: OutputStream
     
-    public init(map: Map, points: [MKPointAnnotation], route: [MKRoute], settings: Settings) {
+    public init(map: Map, points: [MKPointAnnotation], route: Set<Routing>, settings: Settings) {
         self.map = map
         self.points = points
         self.route = route
         self.settings = settings
         
-        shots = (points.map(\.coordinate) + route.flatMap(\.coordinate))
+        shots = (points.map(\.coordinate) + route.map(\.route).flatMap(\.coordinate))
             .rect
             .shots
         total = .init(shots.count)
@@ -64,10 +64,9 @@ public final class Factory {
                 
                 if shots.isEmpty {
                     output.close()
-                    finished.send(.init(route: route.map(\.route),
-                                        settings: settings,
+                    finished.send(.init(settings: settings,
                                         thumbnail: thumbnail!,
-                                        points: points.map(\.point),
+                                        points: points.points(with: route),
                                         tiles: result))
                 } else {
                     await shoot()
