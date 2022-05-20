@@ -26,7 +26,7 @@ public struct Signature: Storable {
         .adding(settings)
         .wrapping(size: UInt32.self, data: thumbnail)
         .adding(size: UInt8.self, collection: points)
-        .wrapping(size: UInt16.self, data: content)
+        .wrapping(size: UInt32.self, data: content)
     }
     
     public init(data: inout Data) {
@@ -34,7 +34,7 @@ public struct Signature: Storable {
         settings = .init(data: &data)
         thumbnail = data.unwrap(size: UInt32.self)
         points = data.collection(size: UInt8.self)
-        content = data.unwrap(size: UInt16.self)
+        content = data.unwrap(size: UInt32.self)
     }
     
     init(route: [Route],
