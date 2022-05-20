@@ -80,6 +80,8 @@ public final class Factory {
     @MainActor public func cancel() {
         canceled = true
         shots = []
+        output.close()
+        Local().delete(map: map)
     }
     
 #if os(iOS)
