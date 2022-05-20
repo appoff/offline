@@ -21,6 +21,15 @@ public struct Item: Storable, Identifiable {
         signature = data.bool() ? .init(data: &data) : nil
     }
     
+    public func contains(tokens: [String]) -> Bool {
+        tokens
+            .contains { token in
+                map.title.localizedCaseInsensitiveContains(token)
+                || map.origin.localizedCaseInsensitiveContains(token)
+                || map.destination.localizedCaseInsensitiveContains(token)
+            }
+    }
+    
     init(map: Map, signature: Signature?) {
         self.map = map
         self.signature = signature
