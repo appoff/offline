@@ -10,6 +10,7 @@ final class SignatureTests: XCTestCase {
         let x = 45356
         let y = 892002
         let offset = UInt32(3252342342)
+        let size = UInt32(1252342342)
         
         let thumbnail = Data("lorem ipsum".utf8)
         let signature = Signature(
@@ -17,11 +18,12 @@ final class SignatureTests: XCTestCase {
             settings: settings,
             thumbnail: thumbnail,
             points: [.init(title: "hello", subtitle: "lorem", coordinate: .init(latitude: 1, longitude: 2))],
-            tiles: [.init(z) : [.init(x) : [.init(y) : offset]]])
+            tiles: [.init(z) : [.init(x) : [.init(y) : (offset: offset, size: size)]]])
         
         let parsed = signature.data.prototype(Signature.self)
         let tiles = parsed.tiles
-        XCTAssertEqual(offset, .init(tiles[x, y, z] ?? 0))
+        XCTAssertEqual(offset, .init(tiles[x, y, z]?.offset ?? 0))
+        XCTAssertEqual(size, .init(tiles[x, y, z]?.size ?? 0))
         XCTAssertEqual(thumbnail, signature.thumbnail)
         XCTAssertEqual("hello", parsed.points.first?.title)
         XCTAssertEqual("lorem", parsed.points.first?.subtitle)

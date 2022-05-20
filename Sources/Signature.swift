@@ -41,7 +41,7 @@ public struct Signature: Storable {
          settings: Settings,
          thumbnail: Data,
          points: [Point],
-         tiles: [UInt8 : [UInt32 : [UInt32 : UInt32]]]) {
+         tiles: [UInt8 : [UInt32 : [UInt32 : (offset: UInt32, size: UInt32)]]]) {
         self.route = route
         self.settings = settings
         self.thumbnail = thumbnail

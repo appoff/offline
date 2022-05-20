@@ -8,7 +8,7 @@ public final class Factory {
     public let map: Map
     private var shots: [Shot]
     private var thumbnail: Data?
-    private var result = [UInt8 : [UInt32 : [UInt32 : UInt32]]]()
+    private var result = [UInt8 : [UInt32 : [UInt32 : (offset: UInt32, size: UInt32)]]]()
     private var canceled = false
     private let total: Double
     private let points: [MKPointAnnotation]
