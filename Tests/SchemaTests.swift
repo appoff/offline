@@ -1,7 +1,7 @@
 import XCTest
 @testable import Offline
 
-final class SignatureTests: XCTestCase {
+final class SchemaTests: XCTestCase {
     func testParse() async {
         var settings = Settings()
         settings.map = .emphasis
@@ -12,7 +12,7 @@ final class SignatureTests: XCTestCase {
         let offset = UInt32(3252342342)
         
         let thumbnail = Data("lorem ipsum".utf8)
-        let signature = Signature(
+        let schema = Schema(
             settings: settings,
             thumbnail: thumbnail,
             points: [.init(title: "hello",
@@ -26,10 +26,10 @@ final class SignatureTests: XCTestCase {
             ],
             tiles: [.init(z) : [.init(x) : [.init(y) : offset]]])
         
-        let parsed = signature.data.prototype(Signature.self)
+        let parsed = schema.data.prototype(Schema.self)
         let tiles = parsed.tiles
         XCTAssertEqual(offset, .init(tiles[x, y, z] ?? 0))
-        XCTAssertEqual(thumbnail, signature.thumbnail)
+        XCTAssertEqual(thumbnail, schema.thumbnail)
         XCTAssertEqual("hello", parsed.points.first?.title)
         XCTAssertEqual("lorem", parsed.points.first?.subtitle)
         XCTAssertEqual(1, parsed.points.first?.coordinate.coordinate.latitude)

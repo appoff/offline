@@ -2,17 +2,17 @@ import Foundation
 import Archivable
 
 struct Package: Storable {
-    let signature: Signature
+    let schema: Schema
     let content: Data
     
     var data: Data {
         .init()
-        .adding(signature)
+        .adding(schema)
         .wrapping(size: UInt32.self, data: content)
     }
     
     init(data: inout Data) {
-        signature = .init(data: &data)
+        schema = .init(data: &data)
         content = data.unwrap(size: UInt32.self)
     }
 }

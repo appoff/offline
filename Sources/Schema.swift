@@ -1,7 +1,7 @@
 import MapKit
 import Archivable
 
-public struct Signature: Storable {
+public struct Schema: Storable {
     public let settings: Settings
     public let thumbnail: Data
     let points: [Point]

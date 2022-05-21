@@ -1,9 +1,9 @@
 import Archivable
 
 extension Cloud where Output == Archive {
-    public func add(map: Map, signature: Signature?) async {
+    public func add(map: Map, schema: Schema?) async {
         model.maps.remove { $0.id == map.id }
-        model.maps.insert(.init(map: map, signature: signature), at: 0)
+        model.maps.insert(.init(map: map, schema: schema), at: 0)
         await stream()
     }
     

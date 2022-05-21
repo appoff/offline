@@ -3,7 +3,7 @@ import Archivable
 
 public struct Item: Storable, Identifiable {
     public let map: Map
-    public let signature: Signature?
+    public let schema: Schema?
     
     public var id: UUID {
         map.id
@@ -12,13 +12,13 @@ public struct Item: Storable, Identifiable {
     public var data: Data {
         .init()
         .adding(map)
-        .adding(signature != nil)
-        .adding(optional: signature)
+        .adding(schema != nil)
+        .adding(optional: schema)
     }
     
     public init(data: inout Data) {
         map = .init(data: &data)
-        signature = data.bool() ? .init(data: &data) : nil
+        schema = data.bool() ? .init(data: &data) : nil
     }
     
     public func contains(tokens: [String]) -> Bool {
@@ -30,8 +30,8 @@ public struct Item: Storable, Identifiable {
             }
     }
     
-    init(map: Map, signature: Signature?) {
+    init(map: Map, schema: Schema?) {
         self.map = map
-        self.signature = signature
+        self.schema = schema
     }
 }

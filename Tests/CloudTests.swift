@@ -10,24 +10,24 @@ final class CloudTests: XCTestCase {
     }
     
     func testAddMap() async {
-        let signature = Signature(settings: .init(), thumbnail: .init(), points: [], tiles: [:])
+        let schema = Schema(settings: .init(), thumbnail: .init(), points: [], tiles: [:])
         
         let map = Map(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
-        await cloud.add(map: map, signature: nil)
+        await cloud.add(map: map, schema: nil)
         
         var value = await cloud.model
         XCTAssertEqual(1, value.maps.count)
-        XCTAssertNil(value.maps.first?.signature)
+        XCTAssertNil(value.maps.first?.schema)
         
-        await cloud.add(map: map, signature: signature)
+        await cloud.add(map: map, schema: schema)
         value = await cloud.model
         XCTAssertEqual(1, value.maps.count)
-        XCTAssertNotNil(value.maps.first?.signature)
+        XCTAssertNotNil(value.maps.first?.schema)
     }
     
     func testDeleteMap() async {
         let map = Map(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
-        await cloud.add(map: map, signature: nil)
+        await cloud.add(map: map, schema: nil)
         await cloud.delete(map: map)
         
         let value = await cloud.model

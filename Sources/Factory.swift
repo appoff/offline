@@ -3,7 +3,7 @@ import Combine
 
 public final class Factory {
     public let fail = PassthroughSubject<Void, Never>()
-    public let finished = PassthroughSubject<Signature, Never>()
+    public let finished = PassthroughSubject<Schema, Never>()
     public let progress = CurrentValueSubject<_, Never>(Double())
     public let map: Map
     private var shots: [Shot]
