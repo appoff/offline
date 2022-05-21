@@ -5,6 +5,10 @@ private let buff = 100_000
 public final class Bufferer: InputStream {
     private let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: buff)
     
+    public init(header: Header) {
+        super.init(url: Local().url(header: header))!
+    }
+    
     public func read(offset: UInt32) throws -> Data {
         var size = try read(offset: .init(offset), length: MemoryLayout<UInt32>.size)
         return try read(offset: .init(offset) + MemoryLayout<UInt32>.size, length: .init(size.number() as UInt32))

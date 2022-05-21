@@ -41,7 +41,7 @@ public struct Local {
             }
     }
     
-    public func url(header: Header) -> URL {
+    func url(header: Header) -> URL {
         directory.appendingPathComponent(header.id.uuidString)
     }
 }
