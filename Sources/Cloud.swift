@@ -18,9 +18,9 @@ extension Cloud where Output == Archive {
         await stream()
     }
     
-    public func update(header: Settings.Map) async {
-        guard header != model.settings.map else { return }
-        model.settings.map = header
+    public func update(map: Settings.Map) async {
+        guard map != model.settings.map else { return }
+        model.settings.map = map
         await stream()
     }
     
