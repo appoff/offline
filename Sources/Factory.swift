@@ -5,7 +5,7 @@ public final class Factory {
     public let fail = PassthroughSubject<Void, Never>()
     public let finished = PassthroughSubject<Schema, Never>()
     public let progress = CurrentValueSubject<_, Never>(Double())
-    public let map: Map
+    public let header: Header
     private var shots: [Shot]
     private var thumbnail: Data?
     private var canceled = false
@@ -17,8 +17,8 @@ public final class Factory {
     private let settings: Settings
     private let output: OutputStream
     
-    public init(map: Map, points: [MKPointAnnotation], route: Set<Routing>, settings: Settings) {
-        self.map = map
+    public init(header: Header, points: [MKPointAnnotation], route: Set<Routing>, settings: Settings) {
+        self.header = header
         self.points = points
         self.route = route
         self.settings = settings
@@ -27,7 +27,7 @@ public final class Factory {
             .rect
             .shots
         total = .init(shots.count)
-        output = .init(url: Local().url(map: map), append: false)!
+        output = .init(url: Local().url(header: header), append: false)!
         output.open()
     }
     
@@ -81,7 +81,7 @@ public final class Factory {
         canceled = true
         shots = []
         output.close()
-        Local().delete(map: map)
+        Local().delete(header: header)
     }
     
 #if os(iOS)

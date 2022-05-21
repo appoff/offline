@@ -1,14 +1,14 @@
 import Archivable
 
 extension Cloud where Output == Archive {
-    public func add(map: Map, schema: Schema?) async {
-        model.maps.remove { $0.id == map.id }
-        model.maps.insert(.init(map: map, schema: schema), at: 0)
+    public func add(header: Header, schema: Schema?) async {
+        model.projects.remove { $0.id == header.id }
+        model.projects.insert(.init(header: header, schema: schema), at: 0)
         await stream()
     }
     
-    public func delete(map: Map) async {
-        model.maps.remove { $0.id == map.id }
+    public func delete(header: Header) async {
+        model.projects.remove { $0.id == header.id }
         await stream()
     }
     
@@ -18,9 +18,9 @@ extension Cloud where Output == Archive {
         await stream()
     }
     
-    public func update(map: Settings.Map) async {
-        guard map != model.settings.map else { return }
-        model.settings.map = map
+    public func update(header: Settings.Map) async {
+        guard header != model.settings.map else { return }
+        model.settings.map = header
         await stream()
     }
     

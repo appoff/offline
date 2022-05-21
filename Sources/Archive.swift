@@ -3,18 +3,18 @@ import Archivable
 
 public struct Archive: Arch {
     public var timestamp: UInt32
-    public internal(set) var maps: [Item]
+    public internal(set) var projects: [Project]
     public internal(set) var settings: Settings
 
     public var data: Data {
         .init()
-        .adding(size: UInt8.self, collection: maps)
+        .adding(size: UInt8.self, collection: projects)
         .adding(settings)
     }
     
     public init() {
         timestamp = 0
-        maps = []
+        projects = []
         settings = .init()
     }
     
@@ -23,10 +23,10 @@ public struct Archive: Arch {
         self.timestamp = timestamp
         
         if version == Self.version {
-            maps = data.collection(size: UInt8.self)
+            projects = data.collection(size: UInt8.self)
             settings = .init(data: &data)
         } else {
-            maps = []
+            projects = []
             settings = .init()
         }
     }

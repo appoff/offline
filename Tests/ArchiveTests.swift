@@ -31,16 +31,16 @@ final class ArchiveTests: XCTestCase {
     }
     
     func testMaps() async {
-        let map1 = Map(title: "Some", origin: "a", destination: "b", distance: 1, duration: 1)
-        let map2 = Map(title: "abc", origin: "fsd", destination: "465645", distance: 3, duration: 3)
+        let map1 = Header(title: "Some", origin: "a", destination: "b", distance: 1, duration: 1)
+        let map2 = Header(title: "abc", origin: "fsd", destination: "465645", distance: 3, duration: 3)
         let schema = Schema(settings: .init(), thumbnail: .init(), points: [], tiles: [:])
-        archive.maps.append(.init(map: map1, schema: schema))
-        archive.maps.append(.init(map: map2, schema: nil))
+        archive.projects.append(.init(header: map1, schema: schema))
+        archive.projects.append(.init(header: map2, schema: nil))
         archive = await Archive.prototype(data: archive.compressed)
-        XCTAssertEqual(2, archive.maps.count)
-        XCTAssertEqual(map1.id, archive.maps.first?.id)
-        XCTAssertEqual(map2.id, archive.maps.last?.id)
-        XCTAssertNil(archive.maps.last?.schema)
-        XCTAssertNotNil(archive.maps.first?.schema)
+        XCTAssertEqual(2, archive.projects.count)
+        XCTAssertEqual(map1.id, archive.projects.first?.id)
+        XCTAssertEqual(map2.id, archive.projects.last?.id)
+        XCTAssertNil(archive.projects.last?.schema)
+        XCTAssertNotNil(archive.projects.first?.schema)
     }
 }

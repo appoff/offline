@@ -4,7 +4,7 @@ public struct Local {
     private let directory: URL
     
     public init() {
-        var url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("maps")
+        var url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("projects")
         
         if !FileManager.default.fileExists(atPath: url.path) {
             var resources = URLResourceValues()
@@ -16,10 +16,10 @@ public struct Local {
         directory = url
     }
     
-    public func size(map: Map) async -> Int? {
+    public func size(header: Header) async -> Int? {
         await Task
             .detached(priority: .utility) {
-                let url = directory.appendingPathComponent(map.id.uuidString)
+                let url = directory.appendingPathComponent(header.id.uuidString)
                 
                 guard
                     FileManager.default.fileExists(atPath: url.path),
@@ -32,16 +32,16 @@ public struct Local {
             .value
     }
     
-    public func delete(map: Map) {
+    public func delete(header: Header) {
         Task
             .detached(priority: .utility) {
-                let url = directory.appendingPathComponent(map.id.uuidString)
+                let url = directory.appendingPathComponent(header.id.uuidString)
                 guard FileManager.default.fileExists(atPath: url.path) else { return }
                 try? FileManager.default.removeItem(at: url)
             }
     }
     
-    func url(map: Map) -> URL {
-        directory.appendingPathComponent(map.id.uuidString)
+    func url(header: Header) -> URL {
+        directory.appendingPathComponent(header.id.uuidString)
     }
 }

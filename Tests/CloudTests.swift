@@ -12,26 +12,26 @@ final class CloudTests: XCTestCase {
     func testAddMap() async {
         let schema = Schema(settings: .init(), thumbnail: .init(), points: [], tiles: [:])
         
-        let map = Map(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
-        await cloud.add(map: map, schema: nil)
+        let map = Header(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
+        await cloud.add(header: map, schema: nil)
         
         var value = await cloud.model
-        XCTAssertEqual(1, value.maps.count)
-        XCTAssertNil(value.maps.first?.schema)
+        XCTAssertEqual(1, value.projects.count)
+        XCTAssertNil(value.projects.first?.schema)
         
-        await cloud.add(map: map, schema: schema)
+        await cloud.add(header: map, schema: schema)
         value = await cloud.model
-        XCTAssertEqual(1, value.maps.count)
-        XCTAssertNotNil(value.maps.first?.schema)
+        XCTAssertEqual(1, value.projects.count)
+        XCTAssertNotNil(value.projects.first?.schema)
     }
     
     func testDeleteMap() async {
-        let map = Map(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
-        await cloud.add(map: map, schema: nil)
-        await cloud.delete(map: map)
+        let map = Header(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
+        await cloud.add(header: map, schema: nil)
+        await cloud.delete(header: map)
         
         let value = await cloud.model
-        XCTAssertTrue(value.maps.isEmpty)
+        XCTAssertTrue(value.projects.isEmpty)
     }
     
     func testScheme() async {
@@ -41,7 +41,7 @@ final class CloudTests: XCTestCase {
     }
     
     func testMap() async {
-        await cloud.update(map: .emphasis)
+        await cloud.update(header: .emphasis)
         let value = await cloud.model.settings.map
         XCTAssertEqual(.emphasis, value)
     }
