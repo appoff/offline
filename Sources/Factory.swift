@@ -100,21 +100,15 @@ public final class Factory {
                                       width: .init(image.cgImage!.width),
                                       height: .init(image.cgImage!.height)))
                         
-                         let content = UIImage(cgImage: UIGraphicsGetCurrentContext()!.makeImage()!)
+                         let data = UIImage(cgImage: UIGraphicsGetCurrentContext()!.makeImage()!)
                             .jpegData(compressionQuality: 1)!
                         
                         UIGraphicsEndImageContext()
                         
-                        try content
-                            .withUnsafeBytes {
-                                if content.count == output.write($0.bindMemory(to: UInt8.self).baseAddress!,
-                                                                 maxLength: content.count) {
-                                    result[.init(shot.z), default: [:]][.init(x + shot.x), default: [:]][.init(y + shot.y)]
-                                    = (offset: offset, size: .init(content.count))
-                                } else {
-                                    throw NSError(domain: "", code: 1)
-                                }
-                            }
+                        try add(image: data,
+                                z: shot.z,
+                                x: x + shot.x,
+                                y: y + shot.y)
                     }
             }
     }
@@ -136,22 +130,26 @@ public final class Factory {
                                   fraction: 1)
                         tile.unlockFocus()
                         
-                        let content = NSBitmapImageRep(
-                            cgImage: tile.cgImage(forProposedRect: nil, context: nil, hints: nil)!)
-                        .representation(using: .png, properties: [:])!
+                        let data = NSBitmapImageRep(cgImage: tile.cgImage(forProposedRect: nil, context: nil, hints: nil)!)
+                            .representation(using: .png, properties: [:])!
                         
-                        try content
-                            .withUnsafeBytes {
-                                if content.count == output.write($0.bindMemory(to: UInt8.self).baseAddress!,
-                                                                 maxLength: content.count) {
-//                                    result[.init(shot.z), default: [:]][.init(x + shot.x), default: [:]][.init(shot.y + shot.height - y - 1)]
-//                                    = (offset: offset, size: .init(content.count))
-                                } else {
-                                    throw NSError(domain: "", code: 1)
-                                }
-                            }
+                        try add(image: data,
+                                z: shot.z,
+                                x: x + shot.x,
+                                y: shot.y + shot.height - y - 1)
                     }
             }
     }
 #endif
+    
+    private func add(image: Data, z: Int, x: Int, y: Int) throws {
+        let data = Data()
+            .adding(UInt32(image.count))
+            .adding(image)
+        
+        try output.write(data: data)
+        
+        result[.init(z), default: [:]][.init(x), default: [:]][.init(y)] = offset
+        offset += .init(data.count)
+    }
 }
