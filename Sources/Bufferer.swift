@@ -15,7 +15,7 @@ public final class Bufferer: InputStream {
     }
     
     private func read(offset: Int, length: Int) throws -> Data {
-        setProperty(NSNumber(value: offset), forKey: .fileCurrentOffsetKey)
+        super.setProperty(NSNumber(value: offset), forKey: .fileCurrentOffsetKey)
         
         var length = length
         var data = Data()
