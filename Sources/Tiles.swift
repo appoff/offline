@@ -1,10 +1,10 @@
 import Foundation
 import Archivable
 
-public struct Tiles: Storable {
+struct Tiles: Storable {
     private let items: [UInt8 : [UInt32 : [UInt32 : UInt32]]]
     
-    public var data: Data {
+    var data: Data {
         .init()
         .adding(UInt8(items.count))
         .adding(items
@@ -29,7 +29,7 @@ public struct Tiles: Storable {
             })
     }
     
-    public init(data: inout Data) {
+    init(data: inout Data) {
         items = (0 ..< .init(data.number() as UInt8))
             .reduce(into: [:]) { z, _ in
                 z[data.number()] = (0 ..< .init(data.number() as UInt16))
@@ -46,7 +46,7 @@ public struct Tiles: Storable {
         self.items = items
     }
     
-    public subscript(x: Int, y: Int, z: Int) -> UInt32? {
+    subscript(x: Int, y: Int, z: Int) -> UInt32? {
         items[.init(z)]?[.init(x)]?[.init(y)]
     }
 }

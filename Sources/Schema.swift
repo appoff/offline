@@ -5,11 +5,7 @@ public struct Schema: Storable {
     public let settings: Settings
     public let thumbnail: Data
     let points: [Point]
-    let content: Data
-    
-    public var tiles: Tiles {
-        content.prototype()
-    }
+    let tiles: Data
     
     public var annotations: [(point: MKPointAnnotation, route: Route?)] {
         points
@@ -27,14 +23,14 @@ public struct Schema: Storable {
         .adding(settings)
         .wrapping(size: UInt32.self, data: thumbnail)
         .adding(size: UInt8.self, collection: points)
-        .wrapping(size: UInt32.self, data: content)
+        .wrapping(size: UInt32.self, data: tiles)
     }
     
     public init(data: inout Data) {
         settings = .init(data: &data)
         thumbnail = data.unwrap(size: UInt32.self)
         points = data.collection(size: UInt8.self)
-        content = data.unwrap(size: UInt32.self)
+        tiles = data.unwrap(size: UInt32.self)
     }
     
     init(settings: Settings,
@@ -44,6 +40,6 @@ public struct Schema: Storable {
         self.settings = settings
         self.thumbnail = thumbnail
         self.points = points
-        content = Tiles(items: tiles).data
+        self.tiles = Tiles(items: tiles).data
     }
 }

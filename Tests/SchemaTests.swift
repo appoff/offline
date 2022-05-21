@@ -27,7 +27,7 @@ final class SchemaTests: XCTestCase {
             tiles: [.init(z) : [.init(x) : [.init(y) : offset]]])
         
         let parsed = schema.data.prototype(Schema.self)
-        let tiles = parsed.tiles
+        let tiles = parsed.tiles.prototype(Tiles.self)
         XCTAssertEqual(offset, .init(tiles[x, y, z] ?? 0))
         XCTAssertEqual(thumbnail, schema.thumbnail)
         XCTAssertEqual("hello", parsed.points.first?.title)

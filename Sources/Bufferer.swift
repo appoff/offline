@@ -1,12 +1,14 @@
-import Foundation
+import MapKit
 
 private let buff = 100_000
 
 public struct Bufferer {
+    let tiles: Tiles
     private let input: InputStream
     private let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: buff)
     
-    public init(header: Header) {
+    init(header: Header, tiles: Tiles) {
+        self.tiles = tiles
         input = .init(url: Local().url(header: header))!
         input.open()
     }
@@ -17,9 +19,13 @@ public struct Bufferer {
         input.close()
     }
     
-    public func read(offset: UInt32) throws -> Data {
-        var size = try read(offset: .init(offset), length: MemoryLayout<UInt32>.size)
-        return try read(offset: .init(offset) + MemoryLayout<UInt32>.size, length: .init(size.number() as UInt32))
+    public func load(at: MKTileOverlayPath) async throws -> Data {
+        try tiles[at.x, at.y, at.z]
+            .flatMap {
+                var size = try read(offset: .init($0), length: MemoryLayout<UInt32>.size)
+                return try read(offset: .init($0) + MemoryLayout<UInt32>.size, length: .init(size.number() as UInt32))
+            }
+        ?? .init()
     }
     
     private func read(offset: Int, length: Int) throws -> Data {

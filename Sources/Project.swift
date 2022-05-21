@@ -9,6 +9,13 @@ public struct Project: Storable, Identifiable {
         header.id
     }
     
+    public var bufferer: Bufferer? {
+        schema
+            .map {
+                .init(header: header, tiles: $0.tiles.prototype())
+            }
+    }
+    
     public var data: Data {
         .init()
         .adding(header)
