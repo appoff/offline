@@ -2,11 +2,19 @@ import Foundation
 
 private let buff = 100_000
 
-public final class Bufferer: InputStream {
+public struct Bufferer {
+    private let input: InputStream
     private let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: buff)
     
     public init(header: Header) {
-        super.init(url: Local().url(header: header))!
+        input = .init(url: Local().url(header: header))!
+        input.open()
+    }
+    
+    public func close() {
+        print("bufferer gone")
+        buffer.deallocate()
+        input.close()
     }
     
     public func read(offset: UInt32) throws -> Data {
@@ -15,13 +23,13 @@ public final class Bufferer: InputStream {
     }
     
     private func read(offset: Int, length: Int) throws -> Data {
-        super.setProperty(NSNumber(value: offset), forKey: .fileCurrentOffsetKey)
+        input.setProperty(NSNumber(value: offset), forKey: .fileCurrentOffsetKey)
         
         var length = length
         var data = Data()
         
         repeat {
-            let read = read(buffer, maxLength: min(buff, length))
+            let read = input.read(buffer, maxLength: min(buff, length))
             
             switch read {
             case 0, 1:
