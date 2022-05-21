@@ -69,7 +69,10 @@ public final class Factory {
                                         points: points.points(with: route),
                                         tiles: result))
                 } else {
-                    await shoot()
+                    Task
+                        .detached { [weak self] in
+                            await self?.shoot()
+                        }
                 }
             } catch {
                 fail.send()
