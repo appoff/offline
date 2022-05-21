@@ -40,7 +40,7 @@ public struct Signature: Storable {
     init(settings: Settings,
          thumbnail: Data,
          points: [Point],
-         tiles: [UInt8 : [UInt32 : [UInt32 : (offset: UInt32, size: UInt32)]]]) {
+         tiles: [UInt8 : [UInt32 : [UInt32 : UInt32]]]) {
         self.settings = settings
         self.thumbnail = thumbnail
         self.points = points

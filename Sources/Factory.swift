@@ -10,7 +10,7 @@ public final class Factory {
     private var thumbnail: Data?
     private var canceled = false
     private var offset = UInt32()
-    private var result = [UInt8 : [UInt32 : [UInt32 : (offset: UInt32, size: UInt32)]]]()
+    private var result = [UInt8 : [UInt32 : [UInt32 : UInt32]]]()
     private let total: Double
     private let points: [MKPointAnnotation]
     private let route: Set<Routing>
@@ -144,8 +144,8 @@ public final class Factory {
                             .withUnsafeBytes {
                                 if content.count == output.write($0.bindMemory(to: UInt8.self).baseAddress!,
                                                                  maxLength: content.count) {
-                                    result[.init(shot.z), default: [:]][.init(x + shot.x), default: [:]][.init(shot.y + shot.height - y - 1)]
-                                    = (offset: offset, size: .init(content.count))
+//                                    result[.init(shot.z), default: [:]][.init(x + shot.x), default: [:]][.init(shot.y + shot.height - y - 1)]
+//                                    = (offset: offset, size: .init(content.count))
                                 } else {
                                     throw NSError(domain: "", code: 1)
                                 }
