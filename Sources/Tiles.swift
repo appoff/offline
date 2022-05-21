@@ -2,7 +2,7 @@ import Foundation
 import Archivable
 
 struct Tiles: Storable {
-    private let items: [UInt8 : [UInt32 : [UInt32 : UInt32]]]
+    private let items: [UInt8 : [UInt32 : [UInt32 : UInt64]]]
     
     var data: Data {
         .init()
@@ -42,11 +42,11 @@ struct Tiles: Storable {
             }
     }
     
-    init(items: [UInt8 : [UInt32 : [UInt32 : UInt32]]]) {
+    init(items: [UInt8 : [UInt32 : [UInt32 : UInt64]]]) {
         self.items = items
     }
     
-    subscript(x: Int, y: Int, z: Int) -> UInt32? {
+    subscript(x: Int, y: Int, z: Int) -> UInt64? {
         items[.init(z)]?[.init(x)]?[.init(y)]
     }
 }
