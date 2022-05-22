@@ -22,7 +22,7 @@ public struct Bufferer {
     public func load(at: MKTileOverlayPath) async throws -> Data {
         print("offset: \(tiles[at.x, at.y, at.z])")
         
-        try tiles[at.x, at.y, at.z]
+        return try tiles[at.x, at.y, at.z]
             .flatMap {
                 var data = try read(offset: .init($0), length: 4)
                 let size = data.number() as UInt32
