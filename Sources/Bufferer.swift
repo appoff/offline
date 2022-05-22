@@ -22,8 +22,8 @@ public struct Bufferer {
     public func load(at: MKTileOverlayPath) async throws -> Data {
         try tiles[at.x, at.y, at.z]
             .flatMap {
-                var size = try read(offset: .init($0), length: MemoryLayout<UInt32>.size)
-                return try read(offset: .init($0) + MemoryLayout<UInt32>.size, length: .init(size.number() as UInt32))
+                var size = try read(offset: .init($0), length: 4)
+                return try read(offset: .init($0) + 4, length: .init(size.number() as UInt32))
             }
         ?? .init()
     }
