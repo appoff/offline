@@ -146,9 +146,13 @@ public final class Factory {
             .adding(UInt32(image.count))
             .adding(image)
         
+        print("adding \(UInt32(image.count))")
+        
         try output.write(data: data)
         
         result[.init(z), default: [:]][.init(x), default: [:]][.init(y)] = offset
         offset += .init(data.count)
+        
+        print("offsrt \(offset)")
     }
 }
