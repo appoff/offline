@@ -22,17 +22,15 @@ public struct Bufferer {
     public func load(at: MKTileOverlayPath) async throws -> Data {
         print("offset: \(tiles[at.x, at.y, at.z])")
         
-        return try tiles[at.x, at.y, at.z]
-            .flatMap {
-                var data = try read(offset: .init($0), length: 4)
-                let size = data.number() as UInt32
-                print("size \(size)")
-                return try read(offset: .init($0) + 4, length: .init(size))
-            }
-        ?? .init()
+        guard let offset = tiles[at.x, at.y, at.z].map(Int.init) else { return .init() }
+        
+        var data = try await read(offset: offset, length: 4)
+        let size = data.number() as UInt32
+        print("size \(size)")
+        return try await read(offset: offset + 4, length: .init(size))
     }
     
-    private func read(offset: Int, length: Int) throws -> Data {
+    @MainActor private func read(offset: Int, length: Int) throws -> Data {
         print("\(offset) : \(length)")
         input.setProperty(NSNumber(value: offset), forKey: .fileCurrentOffsetKey)
         
