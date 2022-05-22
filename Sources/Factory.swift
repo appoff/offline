@@ -9,8 +9,8 @@ public final class Factory {
     private var shots: [Shot]
     private var thumbnail: Data?
     private var canceled = false
-    private var offset = UInt64()
-    private var result = [UInt8 : [UInt32 : [UInt32 : UInt64]]]()
+    private var offset = UInt32()
+    private var result = [UInt8 : [UInt32 : [UInt32 : UInt32]]]()
     private let total: Double
     private let points: [MKPointAnnotation]
     private let route: Set<Routing>

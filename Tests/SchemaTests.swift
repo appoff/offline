@@ -9,7 +9,7 @@ final class SchemaTests: XCTestCase {
         let z = 11
         let x = 45356
         let y = 892002
-        let offset = UInt64(2423425343252342342)
+        let offset = UInt32(1252342342)
         
         let thumbnail = Data("lorem ipsum".utf8)
         let schema = Schema(

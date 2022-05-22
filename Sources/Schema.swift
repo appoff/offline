@@ -36,7 +36,7 @@ public struct Schema: Storable {
     init(settings: Settings,
          thumbnail: Data,
          points: [Point],
-         tiles: [UInt8 : [UInt32 : [UInt32 : UInt64]]]) {
+         tiles: [UInt8 : [UInt32 : [UInt32 : UInt32]]]) {
         self.settings = settings
         self.thumbnail = thumbnail
         self.points = points
