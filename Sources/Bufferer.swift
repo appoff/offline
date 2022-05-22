@@ -31,6 +31,7 @@ public struct Bufferer {
     }
     
     private func read(offset: Int, length: Int) throws -> Data {
+        print("\(offset) : \(length)")
         input.setProperty(NSNumber(value: offset), forKey: .fileCurrentOffsetKey)
         
         var length = length
