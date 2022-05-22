@@ -2,8 +2,8 @@ import MapKit
 import Archivable
 
 public struct Route: Storable {
-    public let distance: UInt32
-    public let duration: UInt32
+    public let distance: UInt16
+    public let duration: UInt16
     let coordinates: [Coordinate]
 
     var polyline: MKPolyline {
@@ -14,16 +14,16 @@ public struct Route: Storable {
         .init()
         .adding(distance)
         .adding(duration)
-        .adding(size: UInt16.self, collection: coordinates)
+        .adding(size: UInt8.self, collection: coordinates)
     }
     
     public init(data: inout Data) {
         distance = data.number()
         duration = data.number()
-        coordinates = data.collection(size: UInt16.self)
+        coordinates = data.collection(size: UInt8.self)
     }
     
-    init(distance: UInt32, duration: UInt32, coordinates: [Coordinate]) {
+    init(distance: UInt16, duration: UInt16, coordinates: [Coordinate]) {
         self.distance = distance
         self.duration = duration
         self.coordinates = coordinates
