@@ -1,7 +1,7 @@
 import MapKit
 
 extension MKMapSnapshotter.Snapshot {
-    static let thumbnail = 420.0
+    static let thumbnail = 480.0
     
     var thumbnail: Data {
 #if os(iOS)
