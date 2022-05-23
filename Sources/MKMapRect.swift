@@ -1,13 +1,14 @@
 import MapKit
 
-private let padding = 1
+private let pad = 1
 
 extension MKMapRect {
     var shots: [Factory.Shot] {
-        (13 ... 19)
+        (14 ... 19)
             .flatMap { z -> [Factory.Shot] in
                 let max = 10
                 let proportion = MKMapRect.world.width / pow(2, .init(z))
+                let padding = z > 17 ? pad : 0
                 let minY = Int(self.minY / proportion) - padding
                 let maxX = Int(ceil(self.maxX / proportion)) + padding
                 let maxY = Int(ceil(self.maxY / proportion)) + padding
