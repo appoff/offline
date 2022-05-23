@@ -9,13 +9,11 @@ public final class Factory {
     private var shots: [Shot]
     private var thumbnail: Data?
     private var canceled = false
-    private var offset = UInt32()
-    private var result = [UInt8 : [UInt32 : [UInt32 : UInt32]]]()
+    private let builder: Builder
     private let total: Double
     private let points: [MKPointAnnotation]
     private let route: Set<Routing>
     private let settings: Settings
-    private let output: OutputStream
     
     public init(header: Header, points: [MKPointAnnotation], route: Set<Routing>, settings: Settings) {
         self.header = header
@@ -27,13 +25,7 @@ public final class Factory {
             .rect
             .shots
         total = .init(shots.count)
-        output = .init(url: Local().url(header: header), append: false)!
-        output.open()
-    }
-    
-    deinit {
-        print("Factory gone")
-        output.close()
+        builder = .init(url: Local().url(header: header))
     }
     
     @MainActor public func shoot() async {
@@ -63,11 +55,11 @@ public final class Factory {
                 shots.removeLast()
                 
                 if shots.isEmpty {
-                    output.close()
-                    finished.send(.init(settings: settings,
+                    builder.output.close()
+                    await finished.send(.init(settings: settings,
                                         thumbnail: thumbnail!,
                                         points: points.points(with: route),
-                                        tiles: result))
+                                        tiles: builder.result))
                 } else {
                     Task
                         .detached { [weak self] in
@@ -83,7 +75,7 @@ public final class Factory {
     @MainActor public func cancel() {
         canceled = true
         shots = []
-        output.close()
+        builder.output.close()
         Local().delete(header: header)
     }
     
@@ -106,7 +98,7 @@ public final class Factory {
                 
                 UIGraphicsEndImageContext()
                 
-                try await add(image: data,
+                try await builder.add(image: data,
                               z: shot.z,
                               x: x + shot.x,
                               y: y + shot.y)
@@ -132,7 +124,7 @@ public final class Factory {
                 let data = NSBitmapImageRep(cgImage: tile.cgImage(forProposedRect: nil, context: nil, hints: nil)!)
                     .representation(using: .png, properties: [:])!
                 
-                try await add(image: data,
+                try await builder.add(image: data,
                               z: shot.z,
                               x: x + shot.x,
                               y: shot.y + shot.height - y - 1)
@@ -140,19 +132,4 @@ public final class Factory {
         }
     }
 #endif
-    
-    @MainActor private func add(image: Data, z: Int, x: Int, y: Int) throws {
-        let data = Data()
-            .adding(UInt32(image.count))
-            .adding(image)
-        
-        print("adding \(UInt32(image.count))")
-        
-        try output.write(data: data)
-        
-        result[.init(z), default: [:]][.init(x), default: [:]][.init(y)] = offset
-        offset += .init(data.count)
-        
-        print("offsrt \(offset)")
-    }
 }

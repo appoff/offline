@@ -2,7 +2,7 @@ import MapKit
 
 private let buff = 100_000
 
-public actor Bufferer {
+public final actor Bufferer {
     let tiles: Tiles
     private let input: InputStream
     private let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: buff)
