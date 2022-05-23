@@ -8,7 +8,7 @@ extension MKMapRect {
             .flatMap { z -> [Factory.Shot] in
                 let max = 10
                 let proportion = MKMapRect.world.width / pow(2, .init(z))
-                let padding = z > 17 ? pad : 0
+                let padding = z == 19 ? pad : 0
                 let minY = Int(self.minY / proportion) - padding
                 let maxX = Int(ceil(self.maxX / proportion)) + padding
                 let maxY = Int(ceil(self.maxY / proportion)) + padding
