@@ -2,7 +2,7 @@ import MapKit
 
 private let buff = 100_000
 
-public struct Bufferer {
+public actor Bufferer {
     let tiles: Tiles
     private let input: InputStream
     private let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: buff)
@@ -13,25 +13,20 @@ public struct Bufferer {
         input.open()
     }
     
-    public func close() {
+    deinit {
         print("bufferer gone")
         buffer.deallocate()
         input.close()
     }
     
-    public func load(at: MKTileOverlayPath) async throws -> Data {
-        print("offset: \(tiles[at.x, at.y, at.z])")
-        
+    public func load(at: MKTileOverlayPath) throws -> Data {
         guard let offset = tiles[at.x, at.y, at.z].map(Int.init) else { return .init() }
         
-        var data = try await read(offset: offset, length: 4)
-        let size = data.number() as UInt32
-        print("size \(size)")
-        return try await read(offset: offset + 4, length: .init(size))
+        var data = try read(offset: offset, length: 4)
+        return try read(offset: offset + 4, length: .init(data.number() as UInt32))
     }
     
-    @MainActor private func read(offset: Int, length: Int) throws -> Data {
-        print("\(offset) : \(length)")
+    private func read(offset: Int, length: Int) throws -> Data {
         input.setProperty(NSNumber(value: offset), forKey: .fileCurrentOffsetKey)
         
         var length = length
