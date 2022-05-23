@@ -1,6 +1,6 @@
 import MapKit
 
-private let padding = 2
+private let padding = 1
 
 extension MKMapRect {
     var shots: [Factory.Shot] {
