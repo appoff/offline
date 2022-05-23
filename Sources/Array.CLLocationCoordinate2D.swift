@@ -3,7 +3,7 @@ import MapKit
 private let margin = 0.001
 
 extension Array where Element == CLLocationCoordinate2D {
-    var rect: MKMapRect {
+    public var rect: MKMapRect {
         { latitude, longitude in
             { min, max in
                 .init(x: min.x, y: min.y, width: max.x - min.x, height: max.y - min.y)
