@@ -3,7 +3,7 @@ import MapKit
 extension MKPointAnnotation {
     var thumbnail: MKMapSnapshotter.Options {
         let point = MKMapPoint(coordinate)
-        let proportion = MKMapRect.world.width / pow(2, .init(16))
+        let proportion = MKMapRect.world.width / pow(2, .init(17))
         let options = MKMapSnapshotter.Options()
         options.mapType = .standard
         options.size = .init(width: MKMapSnapshotter.Snapshot.thumbnail, height: MKMapSnapshotter.Snapshot.thumbnail)

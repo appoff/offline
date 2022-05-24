@@ -6,7 +6,7 @@ extension MKMapSnapshotter.Snapshot {
     var thumbnail: Data {
 #if os(iOS)
         let width = Self.thumbnail * 2
-        let height = Self.thumbnail * 1.5
+        let height = Self.thumbnail
         UIGraphicsBeginImageContext(.init(width: width, height: height))
         UIGraphicsGetCurrentContext()!.translateBy(x: 0, y: height)
         UIGraphicsGetCurrentContext()!.scaleBy(x: 1, y: -1)
