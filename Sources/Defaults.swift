@@ -13,16 +13,15 @@ public struct Defaults {
     }
     
     public static var rate: Bool {
-        if let created = created {
-            let days = Calendar.current.dateComponents([.day], from: created, to: .init()).day!
-            return days > 1
-        } else {
-            created = .init()
-        }
-        return false
+        created
+            .map {
+                let days = Calendar.current.dateComponents([.day], from: $0, to: .init()).day!
+                return days > 1
+            }
+        ?? false
     }
     
-    static var created: Date? {
+    private static var created: Date? {
         get { self[.created] as? Date }
         set { self[.created] = newValue }
     }
@@ -30,6 +29,12 @@ public struct Defaults {
     private static subscript(_ key: Key) -> Any? {
         get { UserDefaults.standard.object(forKey: key.rawValue) }
         set { UserDefaults.standard.setValue(newValue, forKey: key.rawValue) }
+    }
+    
+    public static func start() {
+        if created == nil {
+            created = .init()
+        }
     }
     
     private init() { }
