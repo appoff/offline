@@ -34,6 +34,20 @@ final class CloudTests: XCTestCase {
         XCTAssertTrue(value.projects.isEmpty)
     }
     
+    func testOffloadMap() async {
+        let header = Header(title: "asd", origin: "fds", destination: "hre", distance: 3432, duration: 563)
+        await cloud.add(header: header, schema: .init(settings: .init(), thumbnail: .init(), points: [], tiles: [:]))
+        await cloud.add(header: .init(title: "", origin: "", destination: "", distance: 0, duration: 0), schema: nil)
+        
+        var value = await cloud.model
+        XCTAssertNotNil(value.projects[1].schema)
+        
+        await cloud.offload(header: header)
+        value = await cloud.model
+        XCTAssertEqual(header.id, value.projects[1].header.id)
+        XCTAssertNil(value.projects[1].schema)
+    }
+    
     func testScheme() async {
         await cloud.update(scheme: .dark)
         let value = await cloud.model.settings.scheme

@@ -12,6 +12,13 @@ extension Cloud where Output == Archive {
         await stream()
     }
     
+    public func offload(header: Header) async {
+        guard let index = model.projects.firstIndex(where: { $0.id == header.id }) else { return }
+        model.projects.remove(at: index)
+        model.projects.insert(.init(header: header, schema: nil), at: index)
+        await stream()
+    }
+    
     public func update(scheme: Settings.Scheme) async {
         guard scheme != model.settings.scheme else { return }
         model.settings.scheme = scheme
