@@ -16,6 +16,15 @@ public struct Local {
         directory = url
     }
     
+    public func save(header: Header, data: Data) {
+        Task
+            .detached(priority: .utility) {
+                let url = directory.appendingPathComponent(header.id.uuidString)
+                guard !FileManager.default.fileExists(atPath: url.path) else { return }
+                try? data.write(to: url, options: .atomic)
+            }
+    }
+    
     public func size(header: Header) async -> Int? {
         await Task
             .detached(priority: .utility) {
