@@ -1,6 +1,9 @@
 import Foundation
 import Archivable
 
+private let header = "offline"
+private let size = 7
+
 public struct Header: Storable, Identifiable {
     public let id: UUID
     public let title: String
@@ -8,6 +11,18 @@ public struct Header: Storable, Identifiable {
     public let destination: String
     public let distance: UInt16
     public let duration: UInt16
+    
+    public static func unwrap(data: Data) -> Self? {
+        guard
+            data.count > size,
+            data[0 ..< size] == Data(header.utf8)
+        else { return nil }
+        return data[size ..< data.count].prototype()
+    }
+    
+    public var wrapped: Data {
+        Data(header.utf8) + data
+    }
     
     public var data: Data {
         .init()

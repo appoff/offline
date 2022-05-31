@@ -26,4 +26,22 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
         XCTAssertLessThan(Data(map.destination.utf8).count, 256)
         XCTAssertLessThan(map.data.count, 1000)
     }
+    
+    func testUnwrap() {
+        let map = Header(title: "Test", origin: "Edinburgh", destination: "Glasgow", distance: 14566, duration: 58723)
+        let parsed = Header.unwrap(data: map.wrapped)
+        XCTAssertEqual(map.id, parsed?.id)
+        XCTAssertEqual(map.title, parsed?.title)
+        XCTAssertEqual(map.origin, parsed?.origin)
+        XCTAssertEqual(map.destination, parsed?.destination)
+        XCTAssertEqual(map.distance, parsed?.distance)
+        XCTAssertEqual(map.duration, parsed?.duration)
+    }
+    
+    func testUnwrapOther() {
+        XCTAssertNoThrow(Header.unwrap(data: .init()))
+        XCTAssertNoThrow(Header.unwrap(data: .init("".utf8)))
+        XCTAssertNoThrow(Header.unwrap(data: .init("hello world lorem ipsum".utf8)))
+        XCTAssertNoThrow(Header.unwrap(data: .init("offline".utf8)))
+    }
 }
