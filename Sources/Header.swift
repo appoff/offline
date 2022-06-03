@@ -12,7 +12,7 @@ public struct Header: Storable, Identifiable {
     public let distance: UInt16
     public let duration: UInt16
     
-    public static func unwrap(data: Data) -> Self? {
+    static func unwrap(data: Data) -> Self? {
         guard
             data.count > size,
             data[0 ..< size] == Data(header.utf8)
@@ -20,7 +20,7 @@ public struct Header: Storable, Identifiable {
         return data[size ..< data.count].prototype()
     }
     
-    public var wrapped: Data {
+    var wrapped: Data {
         Data(header.utf8) + data
     }
     
