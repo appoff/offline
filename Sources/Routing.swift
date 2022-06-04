@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import MapKit
 
 public struct Routing: Hashable {
@@ -11,3 +12,4 @@ public struct Routing: Hashable {
         self.route = route
     }
 }
+#endif

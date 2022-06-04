@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import MapKit
 
 private let pad = 1
@@ -36,3 +37,4 @@ extension MKMapRect {
             }
     }
 }
+#endif

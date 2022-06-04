@@ -1,4 +1,7 @@
+#if os(iOS) || os(macOS)
 import MapKit
+#endif
+
 import Archivable
 
 public struct Route: Storable {
@@ -6,9 +9,11 @@ public struct Route: Storable {
     public let duration: UInt16
     let coordinates: [Coordinate]
 
+#if os(iOS) || os(macOS)
     var polyline: MKPolyline {
         .init(coordinates: coordinates.map(\.coordinate), count: coordinates.count)
     }
+#endif
     
     public var data: Data {
         .init()

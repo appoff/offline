@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import MapKit
 import Combine
 
@@ -133,3 +134,4 @@ public final class Factory {
     }
 #endif
 }
+#endif

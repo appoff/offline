@@ -1,4 +1,7 @@
+#if os(iOS) || os(macOS)
 import MapKit
+#endif
+
 import Archivable
 
 struct Point: Storable {
@@ -6,7 +9,8 @@ struct Point: Storable {
     let subtitle: String
     let coordinate: Coordinate
     let route: Route?
-    
+
+#if os(iOS) || os(macOS)
     var annotation: MKPointAnnotation {
         let result = MKPointAnnotation()
         result.coordinate = coordinate.coordinate
@@ -14,6 +18,7 @@ struct Point: Storable {
         result.subtitle = subtitle
         return result
     }
+#endif
     
     var data: Data {
         .init()

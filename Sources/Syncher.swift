@@ -1,6 +1,6 @@
+#if os(iOS) || os(macOS)
 import CoreImage
 import CloudKit
-import Network
 
 private let _id = "id"
 private let _schema = "schema"
@@ -130,3 +130,4 @@ public struct Syncher {
         }
     }
 }
+#endif

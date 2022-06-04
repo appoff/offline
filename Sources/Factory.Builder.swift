@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import Foundation
 
 extension Factory {
@@ -12,7 +13,6 @@ extension Factory {
         }
         
         deinit {
-            print("Builder gone")
             output.close()
         }
         
@@ -52,3 +52,4 @@ extension Factory {
         }
     }
 }
+#endif

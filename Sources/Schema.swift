@@ -1,4 +1,7 @@
+#if os(iOS) || os(macOS)
 import MapKit
+#endif
+
 import Archivable
 
 public struct Schema: Storable {
@@ -7,6 +10,7 @@ public struct Schema: Storable {
     let points: [Point]
     let tiles: Data
     
+#if os(iOS) || os(macOS)
     public var annotations: [(point: MKPointAnnotation, route: Route?)] {
         points
             .map {
@@ -17,6 +21,7 @@ public struct Schema: Storable {
     public var polyline: MKMultiPolyline {
         .init(points.compactMap(\.route?.polyline))
     }
+#endif
     
     public var data: Data {
         .init()

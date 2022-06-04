@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import Foundation
 import Archivable
 
@@ -50,3 +51,4 @@ struct Tiles: Storable {
         items[.init(z)]?[.init(x)]?[.init(y)]
     }
 }
+#endif

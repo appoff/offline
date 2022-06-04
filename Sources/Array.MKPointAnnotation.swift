@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import MapKit
 
 extension Array where Element == MKPointAnnotation {
@@ -15,3 +16,4 @@ extension Array where Element == MKPointAnnotation {
         }
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import MapKit
 
 extension MKPointAnnotation {
@@ -14,3 +15,4 @@ extension MKPointAnnotation {
         return options
     }
 }
+#endif

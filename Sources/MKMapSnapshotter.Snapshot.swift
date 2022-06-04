@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import MapKit
 
 extension MKMapSnapshotter.Snapshot {
@@ -41,3 +42,4 @@ extension MKMapSnapshotter.Snapshot {
 #endif
     }
 }
+#endif

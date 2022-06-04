@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import Foundation
 
 public struct Local {
@@ -54,3 +55,4 @@ public struct Local {
         directory.appendingPathComponent(header.id.uuidString)
     }
 }
+#endif

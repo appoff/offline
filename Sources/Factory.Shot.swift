@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import MapKit
 
 extension Factory {
@@ -31,3 +32,4 @@ extension Factory {
         }
     }
 }
+#endif

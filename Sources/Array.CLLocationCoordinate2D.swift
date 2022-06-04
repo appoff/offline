@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import MapKit
 
 private let margin = 0.001
@@ -12,3 +13,4 @@ extension Array where Element == CLLocationCoordinate2D {
         } (sorted { $0.latitude > $1.latitude }, sorted { $0.longitude < $1.longitude })
     }
 }
+#endif

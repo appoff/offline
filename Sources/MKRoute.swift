@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import MapKit
 
 extension MKRoute {
@@ -10,3 +11,4 @@ extension MKRoute {
         .init(distance: .init(distance), duration: .init(expectedTravelTime), coordinates: coordinate.map(\.coordinate))
     }
 }
+#endif

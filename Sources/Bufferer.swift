@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import MapKit
 
 private let buff = 100_000
@@ -47,3 +48,4 @@ public final actor Bufferer {
         return data
     }
 }
+#endif
