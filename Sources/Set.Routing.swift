@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import Foundation
 import CoreLocation
 
@@ -12,3 +13,4 @@ extension Set where Element == Routing {
             .reduce(0, +)
     }
 }
+#endif

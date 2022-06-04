@@ -9,12 +9,14 @@ public struct Project: Storable, Identifiable {
         header.id
     }
     
+#if os(iOS) || os(macOS)
     public var bufferer: Bufferer? {
         schema
             .map {
                 .init(header: header, tiles: $0.tiles.prototype())
             }
     }
+#endif
     
     public var data: Data {
         .init()

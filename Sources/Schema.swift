@@ -1,5 +1,7 @@
 #if os(iOS) || os(macOS)
 import MapKit
+#else
+import Foundation
 #endif
 
 import Archivable
