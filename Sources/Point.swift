@@ -1,7 +1,7 @@
 #if os(iOS) || os(macOS)
 import MapKit
 #else
-import Foundation
+import CoreLocation
 #endif
 
 import Archivable
@@ -19,6 +19,10 @@ struct Point: Storable {
         result.title = title
         result.subtitle = subtitle
         return result
+    }
+#else
+    var annotation: CLLocationCoordinate2D {
+        coordinate.coordinate
     }
 #endif
     

@@ -1,7 +1,7 @@
 #if os(iOS) || os(macOS)
 import MapKit
 #else
-import Foundation
+import CoreLocation
 #endif
 
 import Archivable
@@ -22,6 +22,17 @@ public struct Schema: Storable {
     
     public var polyline: MKMultiPolyline {
         .init(points.compactMap(\.route?.polyline))
+    }
+#else
+    public var annotations: [(title: String, coordinate: CLLocationCoordinate2D)] {
+        points
+            .map {
+                (title: $0.title, coordinate: $0.annotation)
+            }
+    }
+    
+    public var polyline: [CLLocationCoordinate2D] {
+        points.compactMap(\.route?).flatMap(\.coordinates).map(\.coordinate)
     }
 #endif
     
