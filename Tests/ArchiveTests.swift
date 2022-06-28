@@ -21,7 +21,7 @@ final class ArchiveTests: XCTestCase {
         archive.settings.directions = .driving
         archive.settings.interest = false
         archive.settings.rotate = true
-        archive = await Archive.prototype(data: archive.compressed)
+        archive = await Archive(version: Archive.version, timestamp: archive.timestamp, data: archive.data)
         
         XCTAssertEqual(.dark, archive.settings.scheme)
         XCTAssertEqual(.emphasis, archive.settings.map)
@@ -36,7 +36,7 @@ final class ArchiveTests: XCTestCase {
         let schema = Schema(settings: .init(), thumbnail: .init(), points: [], tiles: [:])
         archive.projects.append(.init(header: map1, schema: schema))
         archive.projects.append(.init(header: map2, schema: nil))
-        archive = await Archive.prototype(data: archive.compressed)
+        archive = await Archive(version: Archive.version, timestamp: archive.timestamp, data: archive.data)
         XCTAssertEqual(2, archive.projects.count)
         XCTAssertEqual(map1.id, archive.projects.first?.id)
         XCTAssertEqual(map2.id, archive.projects.last?.id)
