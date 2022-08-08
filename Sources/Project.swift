@@ -30,17 +30,17 @@ public struct Project: Storable, Identifiable {
         schema = data.bool() ? .init(data: &data) : nil
     }
     
-    public func contains(tokens: [String]) -> Bool {
+    init(header: Header, schema: Schema?) {
+        self.header = header
+        self.schema = schema
+    }
+    
+    func contains(tokens: [String]) -> Bool {
         tokens
             .contains { token in
                 header.title.localizedCaseInsensitiveContains(token)
                 || header.origin.localizedCaseInsensitiveContains(token)
                 || header.destination.localizedCaseInsensitiveContains(token)
             }
-    }
-    
-    init(header: Header, schema: Schema?) {
-        self.header = header
-        self.schema = schema
     }
 }
