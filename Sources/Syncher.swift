@@ -7,6 +7,7 @@ private let _schema = "schema"
 private let _payload = "payload"
 
 public struct Syncher {
+    public let size = 110
     public let header: Header
     private let container = CKContainer(identifier: "iCloud.offline")
     private let config = CKOperation.Configuration()
